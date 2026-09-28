@@ -1,12 +1,18 @@
 // ==WindhawkMod==
 // @id              overhaulded-alt-tab
 // @name            Overhaulded Alt+Tab
-// @description     Reemplazo experimental de Alt+Tab con un selector de ventanas.
-// @version         0.7
+// @description     Replaces the boring Windows Alt+Tab with a modern and elegant window switcher.
+// @version         1.0.0
 // @author          IMiloDev
-// @github          https://github.com/IMiloDev
+// @github          IMiloDev/OverhauldedWin-Task-Switcher
 // @include         explorer.exe
 // ==/WindhawkMod==
+
+// ==WindhawkModReadme==
+/*
+*/
+// ==/WindhawkModReadme==
+
 // ==WindhawkModSettings==
 /*
 - AnimationFps: "90"
