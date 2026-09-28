@@ -1,4 +1,3 @@
-```yaml
 name: Sync Windhawk README
 
 on:
@@ -100,4 +99,3 @@ jobs:
           git add Task_Switcher.wh.cpp
           git commit -m "docs: sync Windhawk README"
           git push
-```
