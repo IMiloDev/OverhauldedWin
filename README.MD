@@ -4,7 +4,7 @@ A modern, fluid and highly visual replacement for the Windows Alt+Tab experience
 
 ## Preview
 
-# ![OverhauldedWin-Task-Switcher](assets/icons/task-switcher.png)
+# ![OverhauldedWin-Task-Switcher](assets/icons/TaskManager.png)
 
 ## Features
 
