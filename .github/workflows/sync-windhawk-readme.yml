@@ -7,6 +7,7 @@ on:
     paths:
       - "README.MD"
       - "Task_Switcher.wh.cpp"
+      - "assets/icons/preview.gif"
       - ".github/workflows/sync-windhawk-readme.yml"
 
 permissions:
@@ -21,6 +22,30 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Install Pillow
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install Pillow
+
+      - name: Convert GIF to PNG for Windhawk
+        shell: python
+        run: |
+          from pathlib import Path
+          from PIL import Image
+
+          gif_path = Path("assets/icons/preview.gif")
+          png_path = Path("assets/icons/preview.png")
+
+          if not gif_path.exists():
+              raise SystemExit("ERROR: No se encontró assets/icons/preview.gif.")
+
+          with Image.open(gif_path) as gif:
+              gif.seek(0)
+              gif.convert("RGBA").save(png_path)
+
+          print("Primer frame del GIF convertido a PNG.")
 
       - name: Sync README.MD into Windhawk mod
         shell: python
@@ -39,6 +64,12 @@ jobs:
           readme = readme_path.read_text(encoding="utf-8")
           mod = mod_path.read_text(encoding="utf-8")
 
+          # En Windhawk usamos el primer frame del GIF.
+          readme = readme.replace(
+              "assets/icons/preview.gif",
+              "assets/icons/preview.png"
+          )
+
           start_marker = "// ==WindhawkModReadme=="
           end_marker = "// ==/WindhawkModReadme=="
 
@@ -55,7 +86,6 @@ jobs:
           start = mod.index(start_marker)
           end = mod.index(end_marker, start)
 
-          # Convertir README.MD a comentario C++.
           readme_lines = readme.splitlines()
 
           windhawk_readme = "\n".join(
@@ -84,6 +114,11 @@ jobs:
           else:
               mod_path.write_text(new_mod, encoding="utf-8")
               print("README sincronizado correctamente.")
+
+      - name: Remove temporary PNG
+        shell: bash
+        run: |
+          rm -f assets/icons/preview.png
 
       - name: Commit synchronized README
         shell: bash
