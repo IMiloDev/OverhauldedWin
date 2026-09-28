@@ -1,4 +1,4 @@
-# <img src="assets/icon" width="32" height="32"> Overhaulded Task Switcher
+# <img src="assets/icon/preview.png" width="32" height="32"> Overhaulded Task Switcher
 
 A modern, fluid and highly visual replacement for the Windows Alt+Tab experience, built as a lightweight Windhawk mod.
 
@@ -19,6 +19,7 @@ A modern, fluid and highly visual replacement for the Windows Alt+Tab experience
 * Resolution-aware UI scaling
 * Configurable animation FPS
 * AltGr + Tab support
+* Alt + Tab support
 * Lightweight native C++ implementation
 
 ## Design
@@ -29,27 +30,7 @@ The visual system uses a Black Obsidian surface with subtle content-based illumi
 
 ## Requirements
 
-* Windows
-* Windhawk
-* A compatible version of Windows supported by Windhawk
-
-## Installation
-
-Install the mod through Windhawk once it is available in the Windhawk mod catalog.
-
-For development, the `.wh.cpp` source can be loaded directly through Windhawk's mod editor.
-
-## Project Structure
-
-```text
-Overhaulded-Task-Switcher/
-├── README.md
-├── LICENSE
-├── TaskManager.png
-├── assets/
-│   └── icon
-└── overhaulded-task-switcher.wh.cpp
-```
+* Windows (11 Only)
 
 ## License
 
