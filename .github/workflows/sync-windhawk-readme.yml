@@ -26,6 +26,7 @@ jobs:
         shell: python
         run: |
           from pathlib import Path
+          import re
 
           readme_path = Path("README.MD")
           mod_path = Path("Task_Switcher.wh.cpp")
@@ -52,15 +53,31 @@ jobs:
                   "ERROR: No se encontró // ==/WindhawkModReadme==."
               )
 
+          # Windhawk funciona mejor con listas Markdown usando "-".
+          # Convertimos solamente listas que usan "*" al inicio.
+          readme = re.sub(
+              r"(?m)^(\s*)\*\s+",
+              r"\1- ",
+              readme
+          )
+
+          # Añadir el prefijo del comentario C++ sin alterar
+          # la estructura Markdown del README.
+          readme_lines = readme.splitlines()
+
+          windhawk_readme = "\n".join(
+              " * " + line if line else " *"
+              for line in readme_lines
+          )
+
           start = mod.index(start_marker)
           end = mod.index(end_marker, start)
 
-          # Insertar el README exactamente como está.
           replacement = (
               start_marker
               + "\n"
               + "/*\n"
-              + readme
+              + windhawk_readme
               + "\n"
               + "*/\n"
               + end_marker
@@ -92,4 +109,3 @@ jobs:
           git add Task_Switcher.wh.cpp
           git commit -m "docs: sync Windhawk README"
           git push
-
