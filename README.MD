@@ -6,7 +6,7 @@ A modern, fluid and highly visual replacement for the Windows Alt+Tab experience
 
 ## Screenshot
 
-![Preview](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin-Task-Switcher/main/TaskManager.png)
+![OverhauldedWin-Task-Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin-Task-Switcher/assets/icons/TaskSwitcher.png)
 
 ## Features
 
