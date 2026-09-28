@@ -5,6 +5,7 @@
 // @version         1.0.0
 // @author          IMiloDev
 // @github          IMiloDev
+// @homepage        https://github.com/IMiloDev/OverhauldedWin-Task-Switcher
 // @include         explorer.exe
 // ==/WindhawkMod==
 
