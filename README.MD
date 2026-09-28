@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/IMiloDev/OverhauldedWin-Task-Switcher/main/assets/icons/preview.gif" width="42"> Overhaulded Task Switcher
+# <img src="https://raw.githubusercontent.com/IMiloDev/OverhauldedWin-Task-Switcher/main/assets/icons/preview.gif" width="42"> Overhaulded Task Switcher 
 
 A modern, fluid and highly visual replacement for the Windows Alt+Tab experience 🫩.
 
