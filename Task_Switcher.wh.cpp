@@ -11,7 +11,7 @@
 
 // ==WindhawkModReadme==
 /*
- * # <img src="https://raw.githubusercontent.com/IMiloDev/OverhauldedWin-Task-Switcher/main/assets/icons/preview.gif" width="42"> Overhaulded Task Switcher 
+ * # <img src="https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/preview.gif" width="42"> Overhaulded Task Switcher 
  *
  * A modern, fluid and highly visual replacement for the Windows Alt+Tab experience 🫩.
  *
@@ -19,7 +19,7 @@
  *
  * ## Screenshot
  *
- * # ![OverhauldedWin-Task-Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin-Task-Switcher/main/assets/icons/TaskManager.png)
+ * # ![OverhauldedWin-Task-Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/TaskManager.png)
  *
  * ## Features
  *
