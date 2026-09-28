@@ -34,8 +34,8 @@ The visual system uses a Black Obsidian surface with subtle content-based illumi
 
 * Windows (11 Only)
 
-## `Current ver: 1.0.0`
 
+## `Current ver: 1.0.0`
 ## License
 
 This project is licensed under the **MIT License**.
