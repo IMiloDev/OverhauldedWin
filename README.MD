@@ -2,7 +2,8 @@
 
 A modern, fluid and highly visual replacement for the Windows Alt+Tab experience.
 
-Ofc, made as a practice of cpp. Hope you all enjoy this as me developing it this.
+`Ofc, made as a practice of cpp. Hope you all enjoy this as me developing it this.`
+
 ## Preview
 
 # ![OverhauldedWin-Task-Switcher](assets/icons/TaskManager.png)
