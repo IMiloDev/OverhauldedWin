@@ -1,7 +1,8 @@
 # <img src="assets/icons/preview.gif" alt="previe" width="42"> Overhaulded Task Switcher
 
-A modern, fluid and highly visual replacement for the Windows Alt+Tab experience, built as a lightweight Windhawk mod.
+A modern, fluid and highly visual replacement for the Windows Alt+Tab experience.
 
+Ofc, made as a practice of cpp. Hope you all enjoy this as me developing it this.
 ## Preview
 
 # ![OverhauldedWin-Task-Switcher](assets/icons/TaskManager.png)
@@ -31,9 +32,6 @@ The visual system uses a Black Obsidian surface with subtle content-based illumi
 ## Requirements
 
 * Windows (11 Only)
-
-## MADE FOR MEEEE YEAAAH
-I made this like a practice for c++. I hope you all enjoy thiiiis :).
 
 ## License
 
