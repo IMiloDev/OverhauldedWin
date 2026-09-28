@@ -10,19 +10,19 @@ A modern, fluid and highly visual replacement for the Windows Alt+Tab experience
 
 ## Features
 
-* Modern horizontal task switcher interface
-* App grouping by application/process
-* Real DWM window previews
-* Dynamic Obsidian visual system
-* CPU-based desktop blur
-* Fluid Pop opening animation
-* Smooth horizontal navigation
-* Hover interactions and window closing
-* Resolution-aware UI scaling
-* Configurable animation FPS
-* AltGr + Tab support
-* Alt + Tab support
-* Lightweight native C++ implementation
+- Modern horizontal task switcher interface
+- App grouping by application/process
+- Real DWM window previews
+- Dynamic Obsidian visual system
+- CPU-based desktop blur
+- Fluid Pop opening animation
+- Smooth horizontal navigation
+- Hover interactions and window closing
+- Resolution-aware UI scaling
+- Configurable animation FPS
+- AltGr + Tab support
+- Alt + Tab support
+- Lightweight native C++ implementation
 
 ## Design
 
@@ -32,7 +32,7 @@ The visual system uses a Black Obsidian surface with subtle content-based illumi
 
 ## Requirements
 
-* Windows (11 Only)
+- Windows (11 Only)
 
 ## License
 
