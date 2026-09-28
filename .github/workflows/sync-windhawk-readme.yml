@@ -1,0 +1,101 @@
+name: Sync Windhawk README
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "README.md"
+      - "overhaulded-alt-tab.wh.cpp"
+      - ".github/workflows/sync-windhawk-readme.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  sync-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Sync README into Windhawk mod
+        shell: python
+        run: |
+          from pathlib import Path
+
+          readme_path = Path("README.md")
+          mod_path = Path("overhaulded-alt-tab.wh.cpp")
+
+          if not readme_path.exists():
+              raise SystemExit("README.md no existe.")
+
+          if not mod_path.exists():
+              raise SystemExit("overhaulded-alt-tab.wh.cpp no existe.")
+
+          readme = readme_path.read_text(encoding="utf-8")
+          mod = mod_path.read_text(encoding="utf-8")
+
+          start_marker = "// ==WindhawkModReadme=="
+          end_marker = "// ==/WindhawkModReadme=="
+
+          if start_marker not in mod:
+              raise SystemExit(
+                  "No se encontró // ==WindhawkModReadme== en el archivo .wh.cpp."
+              )
+
+          if end_marker not in mod:
+              raise SystemExit(
+                  "No se encontró // ==/WindhawkModReadme== en el archivo .wh.cpp."
+              )
+
+          start = mod.index(start_marker)
+          end = mod.index(end_marker, start)
+
+          # Convierte el README en un bloque de comentario C++.
+          readme_lines = readme.splitlines()
+
+          windhawk_readme = "\n".join(
+              " * " + line if line else " *"
+              for line in readme_lines
+          )
+
+          replacement = (
+              start_marker
+              + "\n"
+              + "/*\n"
+              + windhawk_readme
+              + "\n"
+              + "*/\n"
+              + end_marker
+          )
+
+          new_mod = (
+              mod[:start]
+              + replacement
+              + mod[end + len(end_marker):]
+          )
+
+          if new_mod == mod:
+              print("El README ya está sincronizado.")
+          else:
+              mod_path.write_text(new_mod, encoding="utf-8")
+              print("README sincronizado correctamente.")
+
+      - name: Commit synchronized README
+        shell: bash
+        run: |
+          if git diff --quiet -- overhaulded-alt-tab.wh.cpp; then
+            echo "No hay cambios que guardar."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add overhaulded-alt-tab.wh.cpp
+          git commit -m "docs: sync Windhawk README"
+          git push
