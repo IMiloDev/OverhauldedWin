@@ -1,4 +1,4 @@
-# <img src="assets/icon/preview.gif" width="32" height="32"> Overhaulded Task Switcher
+# <img src="assets/icon/preview.gif" width="64" height="64"> Overhaulded Task Switcher
 
 A modern, fluid and highly visual replacement for the Windows Alt+Tab experience, built as a lightweight Windhawk mod.
 
