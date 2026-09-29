@@ -81,7 +81,7 @@ The central visualizer remains fixed while the cards move through the carousel, 
 
 ### Navigation
 
-![OverhauldedWin Navigation Animation](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
+![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
 
 ### Close
 
