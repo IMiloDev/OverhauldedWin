@@ -33,13 +33,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 * Lightweight native C++ implementation
 * Background execution for fast activation
 
-## Why Overhaulded?
-
-Overhaulded is designed as an alternative to the traditional Windows task switcher while keeping the interaction familiar.
-
-The goal is not to replace Alt+Tab with a completely different workflow, but to make the existing workflow feel more fluid, visual and responsive.
-
-Unlike a simple application switcher, Overhaulded focuses heavily on:
+### Another Features
 
 * Visual continuity between selections
 * Smooth carousel-style navigation
