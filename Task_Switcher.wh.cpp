@@ -11,7 +11,7 @@
 
 // ==WindhawkModReadme==
 /*
- * <img src="https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/preview.webp" width="45"> # Overhaulded Task Switcher
+ * # Overhaulded Task Switcher
  *
  * A modern, fluid and highly visual replacement for the Windows Alt+Tab experience 🫩.
  *
@@ -44,8 +44,9 @@
  * The visual system uses a Black Obsidian surface with subtle content-based illumination, rounded cards, restrained shadows and smooth transitions.
  *
  * ## Smooth Animations
+ * ### Open
  * ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-switcher.webp)
- *
+ * ### Slide
  * ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
  *
  *
