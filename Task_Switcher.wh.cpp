@@ -56,7 +56,7 @@ The visual system uses a Black Obsidian surface with subtle content-based illumi
 ## Requirements
 
 - Windows 11 Only)
-- Windows <span style="color: #163a66"> 11 Only</span>
+- Windows $${\color{#63a66}11 Only}$$   
 
 ## License
 
