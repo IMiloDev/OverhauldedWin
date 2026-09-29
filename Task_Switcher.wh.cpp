@@ -63,7 +63,7 @@ This project is licensed under the **MIT License**.
 
 See the [LICENSE](LICENSE) file for the complete license text.
 
-`Current ver: 1.2.11 (PUBLIC-RELEASE)`
+`Current ver: 1.2.21 (PRE-RELEASE)`
 */
 // ==/WindhawkModReadme==
 
