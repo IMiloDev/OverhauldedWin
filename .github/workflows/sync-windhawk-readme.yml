@@ -53,22 +53,17 @@ jobs:
                   "ERROR: No se encontró // ==/WindhawkModReadme==."
               )
 
-          # Windhawk funciona mejor con listas Markdown usando "-".
-          # Convertimos solamente listas que usan "*" al inicio.
+          # Convertir listas Markdown que usan "*" al formato "-".
+          # No afecta los "**textos en negrita**".
           readme = re.sub(
               r"(?m)^(\s*)\*\s+",
               r"\1- ",
               readme
           )
 
-          # Añadir el prefijo del comentario C++ sin alterar
-          # la estructura Markdown del README.
-          readme_lines = readme.splitlines()
-
-          windhawk_readme = "\n".join(
-              " * " + line if line else " *"
-              for line in readme_lines
-          )
+          # Mantener el Markdown exactamente como está en README.MD.
+          # No añadir "*" al inicio de cada línea.
+          windhawk_readme = readme.rstrip()
 
           start = mod.index(start_marker)
           end = mod.index(end_marker, start)
