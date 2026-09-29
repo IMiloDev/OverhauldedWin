@@ -2,7 +2,7 @@
 // @id              overhaulded-alt-tab
 // @name            OverhauldedWin Alt+Tab
 // @description     Replaces the boring Windows Alt+Tab with a modern and elegant window switcher.
-// @version         1.2.19
+// @version         1.1.19
 // @author          IMiloDev
 // @github          https://github.com/IMiloDev
 // @homepage        https://github.com/IMiloDev/OverhauldedWin-Task-Switcher
@@ -13,16 +13,14 @@
 // ==WindhawkModReadme==
 /*
 # Overhaulded Task Switcher
+ 
+A modern, fluid and highly visual replacement for the Windows Alt+Tab experience 🫩. 
 
-A modern, fluid and highly visual replacement for the native Windows Alt+Tab experience.
-
-Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization.
-
-> Ofc, made as a C++ practice project. Hope you enjoy it as much as I enjoy developing it.
+`Ofc, made as a practice of cpp. Hope you all enjoy this as me developing this.`
 
 ## Screenshot
 
-![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Task2.png)
+# ![OverhauldedWin-Task-Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Task2.png)
 
 ## Features
 
@@ -31,142 +29,39 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 - Real DWM window previews
 - Dynamic Obsidian visual system
 - CPU-based desktop blur
-- Rounded cards with subtle downward shadows
-- Floating task switcher surface
-- Fluid opening animation
+- Fluid Pop opening animation
 - Smooth horizontal navigation
-- Interruptible navigation animations
-- Subtle center-card snap animation
-- Hover interactions
-- Window closing
+- Hover interactions and window closing
 - Resolution-aware UI scaling
-- High-DPI support
-- Alt + Tab support
-- Alt + Shift + Tab support
+- Configurable animation FPS
 - AltGr + Tab support
+- Alt + Tab support
 - Lightweight native C++ implementation
-- Background execution for fast activation
-
-### Another Features
-
-- Visual continuity between selections
-- Smooth carousel-style navigation 
-- Real window previews
-- Application-aware grouping
-- Subtle depth and lighting
-- Fast activation through background execution
-
-Overhaulded also aims to remain visually distinct from other Windows task-switcher projects while exploring its own interaction and visual language.
 
 ## Design
 
 Overhaulded focuses on a dark, minimal interface inspired by modern desktop UI design while keeping the selector feeling native to Windows.
 
-The visual system uses a Black Obsidian surface with:
-
-- Rounded cards
-- Subtle downward shadows
-- Content-based illumination
-- Soft depth separation
-- Smooth transitions
-- A fixed central visualizer
-
-The central visualizer remains fixed while the cards move through the carousel, creating the impression of navigating through a physical stack of windows rather than moving the entire interface.
+The visual system uses a Black Obsidian surface with subtle content-based illumination, rounded cards, restrained shadows and smooth transitions.
 
 ## Smooth Animations
-
 ### Open
+## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-switcher.webp)
+### Slide
+## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
 
-![OverhauldedWin Open Animation](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-switcher.webp)
-
-### Navigation
-
-![OverhauldedWin Navigation Animation](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
-
-### Close
-
-![OverhauldedWin Close Animation](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/close.webp)
-
-## Background Execution
-
-Overhaulded remains prepared in the background instead of creating the entire task-switcher interface from scratch every time Alt+Tab is pressed.
-
-This allows the selector to appear immediately while keeping the visual opening animation smooth.
-
-The architecture separates global input handling from the UI/rendering system so that heavy graphics and window-management operations do not run directly inside low-level keyboard hooks.
 
 ## Requirements
 
-- Windows 11 only
-- Windhawk
-
-## Installation
-
-1. Install Windhawk.
-2. Open the Overhaulded Win Task Switcher mod.
-3. Install or compile the latest release.
-4. Enable the mod.
-5. Press `Alt + Tab` to open Overhaulded.
-
-## Controls
-
-| Shortcut                                            | Action                        |
-| --------------------------------------------------- | ----------------------------- |
-| `Alt + Tab`                                         | Move to the next window       |
-| `Alt + Shift + Tab`                                 | Move to the previous window   |
-| `Alt + Tab` + release `Alt`                         | Activate the selected window  |
-| `Esc`                                               | Cancel the switcher           |
-| `Ctrl + Alt + Tab + Arrow` `Alt + Tab Arrow`        | Additional navigation/control |
-
-## Compatibility
-
-Overhaulded is currently designed specifically for Windows 11.
-
-The project is still under active development, so behavior may vary depending on:
-
-- Display scaling
-- Multiple-monitor configurations
-- Windows configuration
-- Application window types
-- Other Alt+Tab/task-switcher modifications
-
-Running multiple applications that replace the native Windows task switcher at the same time may cause conflicts.
-
-## Known Limitations
-
-Overhaulded is still a pre-release project.
-
-Some applications may behave differently from standard desktop windows, particularly applications that use unusual window structures, custom rendering or multiple processes.
-
-Additional compatibility improvements are planned as development continues.
-
-## Development
-
-Overhaulded is primarily a C++ project focused on exploring:
-
-- Win32 APIs
-- Windows hooks
-- DWM
-- Direct2D
-- DirectWrite
-- GDI
-- Window management
-- High-DPI rendering
-- Desktop animation systems
-- Native Windows UI
-
-The project is continuously evolving as new ideas and technical improvements are explored.
+- Windows (11 Only)
 
 ## License
 
 This project is licensed under the **MIT License**.
 
-See the [LICENSE](https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE) file for the complete license text.
+See the [LICENSE](LICENSE) file for the complete license text.
 
----
-
-**Overhaulded Task Switcher**
-Native C++ • Windows 11 • Windhawk
+`Current ver: 1.2.11 (PUBLIC-RELEASE)`
 */
 // ==/WindhawkModReadme==
 
@@ -2436,6 +2331,19 @@ static RECT ScaleRectAroundCenter(const RECT& rect, float scale)
     return result;
 }
 
+static RECT ScaleRectAroundPoint(const RECT& rect, float scale,
+                                 float pivotX, float pivotY)
+{
+    if (fabsf(scale - 1.0f) < 0.0001f)
+        return rect;
+    RECT result = {};
+    result.left = static_cast<LONG>(roundf(pivotX + (rect.left - pivotX) * scale));
+    result.right = static_cast<LONG>(roundf(pivotX + (rect.right - pivotX) * scale));
+    result.top = static_cast<LONG>(roundf(pivotY + (rect.top - pivotY) * scale));
+    result.bottom = static_cast<LONG>(roundf(pivotY + (rect.bottom - pivotY) * scale));
+    return result;
+}
+
 static CardSlotGeometry GetInterpolatedSlotGeometry(float virtualSlot)
 {
     int k0 = static_cast<int>(floorf(virtualSlot));
@@ -2505,8 +2413,8 @@ static RECT GetSlotHeaderRect(int slot)
     header.right = static_cast<int>(roundf(g.right)) - pad;
     header.top = static_cast<int>(roundf(g.top)) + pad;
     header.bottom = header.top + static_cast<int>(roundf(g.headerHeight));
-    if (slot == 2)
-        header = ScaleRectAroundCenter(header, g_cardSnapScale);
+    // El título se mantiene en su geometría normal. El bounce se separa
+    // lógicamente y se aplica únicamente al icono en PaintSlotHeader*.
     if (g_cardExitActive && slot == g_cardExitSlot)
     {
         int offset = static_cast<int>(roundf(GetCardExitOffsetY()));
@@ -3253,6 +3161,14 @@ static void PaintSlotHeaderD2D(int slot, int groupIndex, bool selected, float di
     int iconX = rc.left + paddingLeft;
     int iconY = rc.top + (rc.bottom - rc.top - iconSize) / 2;
     int textX = iconX + iconSize + ScaleLayoutPx(8.0f);
+    RECT iconRect = { iconX, iconY, iconX + iconSize, iconY + iconSize };
+    if (slot == 2)
+    {
+        RECT cardRect = GetSlotCardRect(slot);
+        float pivotX = (static_cast<float>(cardRect.left) + cardRect.right) * 0.5f;
+        float pivotY = (static_cast<float>(cardRect.top) + cardRect.bottom) * 0.5f;
+        iconRect = ScaleRectAroundPoint(iconRect, g_cardSnapScale, pivotX, pivotY);
+    }
 
     // El encabezado es deliberadamente transparente: no crea una superficie
     // oscura independiente sobre el gradiente Dynamic Obsidian de la card.
@@ -3262,10 +3178,10 @@ static void PaintSlotHeaderD2D(int slot, int groupIndex, bool selected, float di
     if (group.iconBitmap)
     {
         D2D1_RECT_F iconDest = D2D1::RectF(
-            static_cast<float>(iconX),
-            static_cast<float>(iconY),
-            static_cast<float>(iconX + iconSize),
-            static_cast<float>(iconY + iconSize));
+            static_cast<float>(iconRect.left),
+            static_cast<float>(iconRect.top),
+            static_cast<float>(iconRect.right),
+            static_cast<float>(iconRect.bottom));
         g_d2dDCRenderTarget->DrawBitmap(
             group.iconBitmap, &iconDest, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
     }
@@ -3319,6 +3235,14 @@ static void PaintSlotHeaderGDI(HDC hdc, int slot, int groupIndex, bool selected,
     int iconX = rc.left + paddingLeft;
     int iconY = rc.top + (rc.bottom - rc.top - iconSize) / 2;
     int textX = iconX + iconSize + ScaleLayoutPx(8.0f);
+    RECT iconRect = { iconX, iconY, iconX + iconSize, iconY + iconSize };
+    if (slot == 2)
+    {
+        RECT cardRect = GetSlotCardRect(slot);
+        float pivotX = (static_cast<float>(cardRect.left) + cardRect.right) * 0.5f;
+        float pivotY = (static_cast<float>(cardRect.top) + cardRect.bottom) * 0.5f;
+        iconRect = ScaleRectAroundPoint(iconRect, g_cardSnapScale, pivotX, pivotY);
+    }
 
     // Sin panel, relleno ni borde propio: el encabezado deja ver la card.
 
@@ -3336,7 +3260,9 @@ static void PaintSlotHeaderGDI(HDC hdc, int slot, int groupIndex, bool selected,
 
     if (group.icon)
     {
-        DrawIconEx(hdc, iconX, iconY, group.icon, iconSize, iconSize, 0, nullptr, DI_NORMAL);
+        DrawIconEx(hdc, iconRect.left, iconRect.top, group.icon,
+                   iconRect.right - iconRect.left, iconRect.bottom - iconRect.top,
+                   0, nullptr, DI_NORMAL);
     }
 }
 
@@ -5068,7 +4994,7 @@ static bool StartWorkerThread(LPTHREAD_START_ROUTINE proc, HANDLE* outThread,
 
 // TOOL MOD
 
-static BOOL WhTool_ModInit()
+BOOL WhTool_ModInit()
 {
     LoadAnimationSettings();
 
@@ -5109,14 +5035,14 @@ static BOOL WhTool_ModInit()
     return TRUE;
 }
 
-static void WhTool_ModSettingsChanged()
+void WhTool_ModSettingsChanged()
 {
     LoadAnimationSettings();
     // Los timers pertenecen al UI thread; se le pide que los reprograme.
     PostUiCommand(WM_UI_SETTINGS, 0, 0);
 }
 
-static void WhTool_ModUninit()
+void WhTool_ModUninit()
 {
     InterlockedExchange(&g_shutdownRequested, 1);
 
