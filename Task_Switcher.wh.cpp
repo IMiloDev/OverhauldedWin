@@ -2,7 +2,7 @@
 // @id              overhaulded-alt-tab
 // @name            OverhauldedWin Alt+Tab
 // @description     Replaces the boring Windows Alt+Tab with a modern and elegant window switcher.
-// @version         1.2.29
+// @version         1.2.11
 // @author          IMiloDev
 // @github          https://github.com/IMiloDev
 // @homepage        https://github.com/IMiloDev/OverhauldedWin-Task-Switcher
@@ -49,19 +49,19 @@ The visual system uses a Black Obsidian surface with subtle content-based illumi
 ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-switcher.webp)
 ### Slide
 ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
-### Close
-## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/close.webp)
 
 
 ## Requirements
-- Windows 11 ONLY
+
+- Windows (11 Only)
+
 ## License
 
 This project is licensed under the **MIT License**.
 
 See the [LICENSE](LICENSE) file for the complete license text.
 
-`Current ver: 1.2.29 (PRE-RELEASE)`
+`Current ver: 1.2.11 (PUBLIC-RELEASE)`
 */
 // ==/WindhawkModReadme==
 
@@ -877,6 +877,47 @@ static int FindAppGroup(DWORD processId)
     return -1;
 }
 
+// Ventanas legítimas que Windows/host marcan como owned o ToolWindow y que el
+// filtro estricto descartaba (consolas, terminales, visor/editor de Windhawk).
+// Solo se consulta para ventanas que ya iban a ser rechazadas por GW_OWNER o
+// WS_EX_TOOLWINDOW: no convierte todas las ToolWindow en aplicaciones.
+static bool IsConsoleOrWindhawkViewerWindow(HWND hwnd, DWORD processId,
+                                            const std::wstring& appName,
+                                            const std::wstring& windowClass)
+{
+    // Nunca ventanas de nuestro propio proceso (selector, ventanas internas).
+    if (processId == GetCurrentProcessId())
+        return false;
+
+    std::wstring name = LowerAscii(appName);
+    std::wstring cls = LowerAscii(windowClass);
+
+    // Consolas clásicas (cmd/PowerShell en conhost) y Windows Terminal.
+    if (cls == L"consolewindowclass" || cls == L"cascadia_hosting_window_class")
+        return true;
+
+    LONG_PTR style = GetWindowLongPtrW(hwnd, GWL_STYLE);
+    LONG_PTR exStyle = GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
+    bool hasNormalFrame = (style & (WS_CAPTION | WS_THICKFRAME |
+                                    WS_MINIMIZEBOX | WS_MAXIMIZEBOX |
+                                    WS_SYSMENU)) != 0;
+    bool hasApplicationStyle = (exStyle & WS_EX_APPWINDOW) != 0;
+    // Exigir marco/AppWindow descarta ventanas auxiliares (IME, tooltips...)
+    // que pertenezcan al mismo proceso.
+    if (!hasNormalFrame && !hasApplicationStyle)
+        return false;
+
+    if (name == L"cmd" || name == L"powershell" || name == L"pwsh" ||
+        name == L"openconsole" || name == L"windowsterminal" || name == L"wt")
+        return true;
+
+    // Visor/editor de código de Windhawk (ventana Chromium del proceso UI).
+    if (name == L"windhawk" && cls == L"chrome_widgetwin_1")
+        return true;
+
+    return false;
+}
+
 static bool IsRealUserApplicationWindow(HWND hwnd, DWORD* processId,
                                         std::wstring* processPath,
                                         std::wstring* appName)
@@ -885,14 +926,14 @@ static bool IsRealUserApplicationWindow(HWND hwnd, DWORD* processId,
         return false;
     if (hwnd == g_selector || IsShellWindow(hwnd))
         return false;
-    if (GetWindow(hwnd, GW_OWNER) != nullptr)
-        return false;
-
     LONG_PTR exStyle = GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
-    if ((exStyle & WS_EX_TOOLWINDOW) != 0)
-        return false;
     if ((exStyle & WS_EX_NOACTIVATE) != 0)
         return false;
+
+    // Owned / ToolWindow: rechazo por defecto, salvo la allowlist de abajo.
+    const bool ownedOrToolWindow =
+        GetWindow(hwnd, GW_OWNER) != nullptr ||
+        (exStyle & WS_EX_TOOLWINDOW) != 0;
 
     wchar_t title[512] = {};
     GetWindowTextW(hwnd, title, ARRAYSIZE(title) - 1);
@@ -905,6 +946,27 @@ static bool IsRealUserApplicationWindow(HWND hwnd, DWORD* processId,
     DWORD pid = 0;
     if (!GetWindowThreadProcessId(hwnd, &pid) || pid == 0)
         return false;
+
+    if (ownedOrToolWindow)
+    {
+        std::wstring allowPath;
+        std::wstring allowName;
+        GetProcessDetails(pid, &allowPath, &allowName);
+        if (!IsConsoleOrWindhawkViewerWindow(hwnd, pid, allowName, windowClass))
+            return false;
+
+        // Allowlist: se acepta directamente. El resto de filtros (que exigen
+        // ventana sin owner) no aplican a estas ventanas.
+        if (allowName.empty())
+            allowName = title;
+        if (processId)
+            *processId = pid;
+        if (processPath)
+            *processPath = allowPath;
+        if (appName)
+            *appName = allowName;
+        return true;
+    }
 
     std::wstring path;
     std::wstring name;
