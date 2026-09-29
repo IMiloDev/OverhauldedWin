@@ -19,7 +19,7 @@
  *
  * ## Screenshot
  *
- * # ![OverhauldedWin-Task-Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/TaskManager.png)
+ * # ![OverhauldedWin-Task-Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Task2.png)
  *
  * ## Features
  *
@@ -53,7 +53,7 @@
  *
  * See the [LICENSE](LICENSE) file for the complete license text.
  *
- * `Current ver: 1.0.0`
+ * `Current ver: 1.2.5`
 */
 // ==/WindhawkModReadme==
 
