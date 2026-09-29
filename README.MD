@@ -40,10 +40,9 @@ The visual system uses a Black Obsidian surface with subtle content-based illumi
 
 
 ## Requirements
-
+```HTML
 - Windows 11 Only)
-- Windows $${\color{#63a66}11 Only}$$   
-
+```
 ## License
 
 This project is licensed under the **MIT License**.
