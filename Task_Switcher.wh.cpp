@@ -49,19 +49,19 @@ The visual system uses a Black Obsidian surface with subtle content-based illumi
 ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-switcher.webp)
 ### Slide
 ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
+### Close
+## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/close.webp)
 
 
 ## Requirements
-
-- Windows (11 Only)
-
+- Windows 11 ONLY
 ## License
 
 This project is licensed under the **MIT License**.
 
 See the [LICENSE](LICENSE) file for the complete license text.
 
-`Current ver: 1.2.11 (PUBLIC-RELEASE)`
+`Current ver: 1.2.29 (PRE-RELEASE)`
 */
 // ==/WindhawkModReadme==
 
