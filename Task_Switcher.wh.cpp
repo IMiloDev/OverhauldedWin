@@ -38,7 +38,10 @@
  * - Lightweight native C++ implementation
  *
  * ## Smooth Animations
+ * ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-switcher.webp)
+ *
  * ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
+ *
  *
  * ## Design
  *
