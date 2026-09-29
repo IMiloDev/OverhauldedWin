@@ -2,7 +2,7 @@
 // @id              overhaulded-alt-tab
 // @name            OverhauldedWin Alt+Tab
 // @description     Replaces the boring Windows Alt+Tab with a modern and elegant window switcher.
-// @version         1.2.11
+// @version         1.2.29
 // @author          IMiloDev
 // @github          https://github.com/IMiloDev
 // @homepage        https://github.com/IMiloDev/OverhauldedWin-Task-Switcher
@@ -49,19 +49,19 @@ The visual system uses a Black Obsidian surface with subtle content-based illumi
 ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-switcher.webp)
 ### Slide
 ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
-### Close
-## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/close.webp)
 
 
 ## Requirements
-- Windows 11 ONLY
+
+- Windows (11 Only)
+
 ## License
 
 This project is licensed under the **MIT License**.
 
 See the [LICENSE](LICENSE) file for the complete license text.
 
-`Current ver: 1.2.29 (PRE-RELEASE)`
+`Current ver: 1.2.11 (PUBLIC-RELEASE)`
 */
 // ==/WindhawkModReadme==
 
@@ -108,7 +108,7 @@ static const UINT_PTR kActivityTimerId = 77;
 static const UINT_PTR kAnimTimerId = 88;
 static const UINT_PTR kTabRepeatTimerId = 89;
 static const UINT_PTR kSelectorMotionTimerId = 90;
-static const int kAnimDurationMs = 140;
+static const float kNavigationDuration = 150.0f;
 static const int kDefaultAnimationFps = 90;
 static int g_animationFps = kDefaultAnimationFps;
 
@@ -158,6 +158,8 @@ static float g_sceneScaleY = 1.0f;
 static float g_sceneOpacity = 1.0f;
 static float g_sceneTiltDegrees = 0.0f;
 static float g_selectionTiltDirection = 0.0f;
+static float g_cardSnapScale = 1.0f;
+static float g_cardSnapStartScale = 1.0f;
 
 static int ScaleLayoutPx(float value)
 {
@@ -567,6 +569,7 @@ static void CleanupKeyboardState();
 static void EmergencyCloseSelector();
 static void StartSelectorClose(HWND target);
 static void UpdateSelectorMotion();
+static float EaseOutCubic(float t);
 static void UpdateCarouselAnimation(HWND hwnd);
 static float GetCardExitProgress();
 static float GetCardExitOpacity();
@@ -2307,6 +2310,27 @@ static inline float LerpFloat(float a, float b, float t)
     return a + (b - a) * t;
 }
 
+static float EaseOutCubic(float t)
+{
+    t = std::max(0.0f, std::min(1.0f, t));
+    float inverse = 1.0f - t;
+    return 1.0f - inverse * inverse * inverse;
+}
+
+static RECT ScaleRectAroundCenter(const RECT& rect, float scale)
+{
+    if (fabsf(scale - 1.0f) < 0.0001f)
+        return rect;
+    float cx = (static_cast<float>(rect.left) + static_cast<float>(rect.right)) * 0.5f;
+    float cy = (static_cast<float>(rect.top) + static_cast<float>(rect.bottom)) * 0.5f;
+    RECT result = {};
+    result.left = static_cast<LONG>(roundf(cx + (rect.left - cx) * scale));
+    result.right = static_cast<LONG>(roundf(cx + (rect.right - cx) * scale));
+    result.top = static_cast<LONG>(roundf(cy + (rect.top - cy) * scale));
+    result.bottom = static_cast<LONG>(roundf(cy + (rect.bottom - cy) * scale));
+    return result;
+}
+
 static CardSlotGeometry GetInterpolatedSlotGeometry(float virtualSlot)
 {
     int k0 = static_cast<int>(floorf(virtualSlot));
@@ -2356,6 +2380,8 @@ static RECT GetSlotCardRect(int slot)
     rc.top = static_cast<int>(roundf(g.top));
     rc.right = static_cast<int>(roundf(g.right));
     rc.bottom = static_cast<int>(roundf(g.bottom));
+    if (slot == 2)
+        rc = ScaleRectAroundCenter(rc, g_cardSnapScale);
     if (g_cardExitActive && slot == g_cardExitSlot)
     {
         int offset = static_cast<int>(roundf(GetCardExitOffsetY()));
@@ -2374,6 +2400,8 @@ static RECT GetSlotHeaderRect(int slot)
     header.right = static_cast<int>(roundf(g.right)) - pad;
     header.top = static_cast<int>(roundf(g.top)) + pad;
     header.bottom = header.top + static_cast<int>(roundf(g.headerHeight));
+    if (slot == 2)
+        header = ScaleRectAroundCenter(header, g_cardSnapScale);
     if (g_cardExitActive && slot == g_cardExitSlot)
     {
         int offset = static_cast<int>(roundf(GetCardExitOffsetY()));
@@ -2396,6 +2424,8 @@ static RECT GetSlotPreviewRect(int slot)
     preview.right = static_cast<int>(roundf(g.right)) - pad;
     preview.top = static_cast<int>(roundf(g.top)) + pad + hHeight + gap;
     preview.bottom = static_cast<int>(roundf(g.bottom)) - pad;
+    if (slot == 2)
+        preview = ScaleRectAroundCenter(preview, g_cardSnapScale);
     if (g_cardExitActive && slot == g_cardExitSlot)
     {
         int offset = static_cast<int>(roundf(GetCardExitOffsetY()));
@@ -2804,6 +2834,8 @@ static void StopCarouselAnimation()
     g_sceneOpacity = 1.0f;
     g_sceneTiltDegrees = 0.0f;
     g_selectionTiltDirection = 0.0f;
+    g_cardSnapScale = 1.0f;
+    g_cardSnapStartScale = 1.0f;
     g_selectionStartScaleX = 1.0f;
     g_selectionStartScaleY = 1.0f;
     g_selectionStartTiltDegrees = 0.0f;
@@ -2944,28 +2976,23 @@ static void UpdateSelectorMotion()
     }
     else if (g_selectorAnimation == SelectorAnimationState::SelectionChange)
     {
-        const float duration = 110.0f;
+        const float duration = kNavigationDuration;
         float t = std::min(1.0f, static_cast<float>(elapsed) / duration);
-        float ease = 1.0f - (1.0f - t) * (1.0f - t) * (1.0f - t);
-        g_sceneScaleX = g_selectionStartScaleX +
-                        (1.0f - g_selectionStartScaleX) * ease;
-        g_sceneScaleY = g_selectionStartScaleY +
-                        (1.0f - g_selectionStartScaleY) * ease;
-        g_sceneOpacity = g_selectionStartOpacity +
-                         (1.0f - g_selectionStartOpacity) * ease;
-
-        // Impulso angular corto: alcanza el máximo hacia la mitad del
-        // desplazamiento y vuelve a cero al asentarse.
-        float tiltEnvelope = sinf(3.14159265358979323846f * t);
-        g_sceneTiltDegrees = g_selectionStartTiltDegrees * (1.0f - t) +
-                             g_selectionTiltDirection * 0.70f * tiltEnvelope;
+        // La navegación se anima exclusivamente mediante g_animOffset. No
+        // escalamos ni inclinamos la escena completa: el visualizer y el
+        // centro de referencia permanecen perfectamente fijos.
+        g_sceneScaleX = 1.0f;
+        g_sceneScaleY = 1.0f;
+        g_sceneOpacity = 1.0f;
+        g_sceneTiltDegrees = 0.0f;
         if (t >= 1.0f)
         {
             g_sceneScaleX = 1.0f;
             g_sceneScaleY = 1.0f;
             g_sceneTiltDegrees = 0.0f;
             g_selectorAnimation = SelectorAnimationState::Open;
-            KillTimer(g_selector, kSelectorMotionTimerId);
+            if (!g_animActive)
+                KillTimer(g_selector, kSelectorMotionTimerId);
         }
     }
     else if (g_selectorAnimation == SelectorAnimationState::Closing)
@@ -3353,7 +3380,7 @@ static void PaintSelectorScene(HWND hwnd, HDC hdc)
 
         // Borde vectorial sutil del contenedor. La región real de la ventana
         // ya recorta las esquinas, por lo que no queda un rectángulo cuadrado.
-        const float containerRadius = static_cast<float>(ScaleLayoutPx(22.0f));
+        const float containerRadius = static_cast<float>(ScaleLayoutPx(27.0f));
         const float containerInset = DpiPx(0.75f);
         D2D1_ROUNDED_RECT containerRect = D2D1::RoundedRect(
             D2D1::RectF(containerInset, containerInset,
@@ -3712,7 +3739,7 @@ static LRESULT CALLBACK SelectorWndProc(HWND hwnd, UINT message, WPARAM wParam, 
 
             ULONGLONG now = GetTickCount64();
             ULONGLONG elapsed = now - g_animStartTime;
-            if (elapsed >= static_cast<ULONGLONG>(kAnimDurationMs))
+            if (elapsed >= static_cast<ULONGLONG>(kNavigationDuration))
             {
                 g_animActive = false;
                 g_animOffset = 0.0f;
@@ -3721,8 +3748,8 @@ static LRESULT CALLBACK SelectorWndProc(HWND hwnd, UINT message, WPARAM wParam, 
             }
             else
             {
-                float t = static_cast<float>(elapsed) / static_cast<float>(kAnimDurationMs);
-                float ease = 1.0f - (1.0f - t) * (1.0f - t);
+                float t = static_cast<float>(elapsed) / kNavigationDuration;
+                float ease = EaseOutCubic(t);
                 g_animOffset = g_animStartOffset * (1.0f - ease);
             }
             UpdateSelectorControls();
@@ -3811,7 +3838,7 @@ static void ApplySelectorRoundedRegion(HWND hwnd)
     if (width <= 0 || height <= 0)
         return;
 
-    int radius = std::max(ScaleLayoutPx(22.0f), 16);
+    int radius = std::max(ScaleLayoutPx(27.0f), 16);
     radius = std::min(radius, std::min(width, height) / 2);
     HRGN region = g_createRoundRectRgn(0, 0, width + 1, height + 1, radius, radius);
     if (region)
@@ -3964,6 +3991,8 @@ static void HideSelectorForSession()
     g_sceneOpacity = 1.0f;
     g_sceneTiltDegrees = 0.0f;
     g_selectionTiltDirection = 0.0f;
+    g_cardSnapScale = 1.0f;
+    g_cardSnapStartScale = 1.0f;
     g_animActive = false;
     g_animOffset = 0.0f;
     g_animStartOffset = 0.0f;
@@ -4048,17 +4077,28 @@ static void UpdateCarouselAnimation(HWND hwnd)
     }
     ULONGLONG now = GetTickCount64();
     ULONGLONG elapsed = now - g_animStartTime;
-    if (elapsed >= static_cast<ULONGLONG>(kAnimDurationMs))
+    float progress = std::min(1.0f,
+        static_cast<float>(elapsed) / kNavigationDuration);
+    float eased = EaseOutCubic(progress);
+    g_animOffset = g_animStartOffset * (1.0f - eased);
+
+    // Snap sutil de la card que llega al centro; no se aplica al contenedor,
+    // al fondo ni al visualizer, que permanecen inmóviles.
+    float snapT = progress <= 0.64f ? 0.0f :
+        std::min(1.0f, (progress - 0.64f) / 0.36f);
+    float targetSnapScale = 1.0f + 0.045f * sinf(
+        snapT * 3.14159265358979323846f);
+    g_cardSnapScale = g_cardSnapStartScale +
+        (targetSnapScale - g_cardSnapStartScale) * eased;
+
+    if (progress >= 1.0f)
     {
         g_animActive = false;
         g_animOffset = 0.0f;
         g_animStartOffset = 0.0f;
-    }
-    else
-    {
-        float t = static_cast<float>(elapsed) / static_cast<float>(kAnimDurationMs);
-        float ease = 1.0f - (1.0f - t) * (1.0f - t);
-        g_animOffset = g_animStartOffset * (1.0f - ease);
+        g_cardSnapScale = 1.0f;
+        g_cardSnapStartScale = 1.0f;
+        KillTimer(hwnd, kAnimTimerId);
     }
     UpdateSelectorControls();
 }
@@ -4070,16 +4110,21 @@ static void StartSlide(int steps)
     if (g_selectorAnimation != SelectorAnimationState::Closing &&
         g_selectorAnimation != SelectorAnimationState::CardExit)
     {
-        g_selectionStartScaleX = g_sceneScaleX;
-        g_selectionStartScaleY = g_sceneScaleY;
-        g_selectionStartOpacity = g_sceneOpacity;
-        g_selectionStartTiltDegrees = g_sceneTiltDegrees;
+        g_selectionStartScaleX = 1.0f;
+        g_selectionStartScaleY = 1.0f;
+        g_selectionStartOpacity = 1.0f;
+        g_selectionStartTiltDegrees = 0.0f;
+        g_sceneScaleX = 1.0f;
+        g_sceneScaleY = 1.0f;
+        g_sceneOpacity = 1.0f;
+        g_sceneTiltDegrees = 0.0f;
         g_selectorAnimation = SelectorAnimationState::SelectionChange;
         g_selectorAnimationStart = GetTickCount64();
         if (g_selector && IsWindow(g_selector))
             SetTimer(g_selector, kSelectorMotionTimerId, GetAnimationTimerInterval(), nullptr);
     }
     g_selectionTiltDirection = steps > 0 ? -1.0f : 1.0f;
+    g_cardSnapStartScale = g_cardSnapScale;
 
     int count = static_cast<int>(g_groups.size());
     g_selected = (g_selected + steps) % count;
