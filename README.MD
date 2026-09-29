@@ -36,7 +36,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 ### Another Features
 
 * Visual continuity between selections
-* Smooth carousel-style navigation
+* Smooth carousel-style navigation 
 * Real window previews
 * Application-aware grouping
 * Subtle depth and lighting
