@@ -6,7 +6,7 @@ A modern, fluid and highly visual replacement for the Windows Alt+Tab experience
 
 ## Screenshot
 
-# ![OverhauldedWin-Task-Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/TaskManager.png)
+# ![OverhauldedWin-Task-Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Task2.png)
 
 ## Features
 
@@ -40,4 +40,4 @@ This project is licensed under the **MIT License**.
 
 See the [LICENSE](LICENSE) file for the complete license text.
 
-`Current ver: 1.0.0`
+`Current ver: 1.2.5`
