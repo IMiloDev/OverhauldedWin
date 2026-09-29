@@ -43,13 +43,6 @@
  *
  * The visual system uses a Black Obsidian surface with subtle content-based illumination, rounded cards, restrained shadows and smooth transitions.
  *
- * ## Smooth Animations
- * ### Open
- * ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-switcher.webp)
- * ### Slide
- * ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
- *
- *
  * ## Requirements
  *
  * - Windows (11 Only)
@@ -291,6 +284,7 @@ enum class ModifierSession
 {
     None,
     LeftAlt,
+    RightAlt,
     AltGr
 };
 
@@ -3548,7 +3542,9 @@ static bool CreateSelector()
     if (g_state != SelectorState::SelectorActive || g_cleanupInProgress)
         return false;
 
-    if (!InitializePersistentSelector())
+    // El selector se crea y precalienta únicamente durante la inicialización
+    // del hilo del hook. Nunca se crea ni se carga en el camino de Alt+Tab.
+    if (!g_selector || !IsWindow(g_selector))
         return false;
 
     g_selectorOpening = true;
@@ -3590,9 +3586,13 @@ static bool CreateSelector()
     ApplySelectorRoundedRegion(g_selector);
 
     // RefreshWindowList coloca la ventana que estaba en foreground en índice 0.
-    // AltGr+Tab debe abrir directamente en el siguiente destino, sin una
-    // animación adicional que mueva el carrusel después de mostrarlo.
-    g_selected = g_groups.size() > 1 ? 1 : 0;
+    // La primera pulsación respeta Shift: Alt+Tab avanza y Alt+Shift+Tab
+    // retrocede desde la ventana actualmente activa.
+    bool shiftHeld = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+    if (g_groups.size() > 1)
+        g_selected = shiftHeld ? static_cast<int>(g_groups.size()) - 1 : 1;
+    else
+        g_selected = 0;
     g_animOffset = 0.0f;
     g_animStartOffset = 0.0f;
     g_animActive = false;
@@ -3888,6 +3888,9 @@ static bool SessionModifierReleased()
     if (g_sessionModifier == ModifierSession::LeftAlt)
         return !g_altLeftDown;
 
+    if (g_sessionModifier == ModifierSession::RightAlt)
+        return !g_altRightDown;
+
     if (g_sessionModifier == ModifierSession::AltGr)
         return !g_altLeftDown && !g_altRightDown &&
                !g_ctrlLeftDown && !g_ctrlRightDown;
@@ -4037,10 +4040,9 @@ static LRESULT CALLBACK KeyboardHook(int nCode, WPARAM wParam, LPARAM lParam)
 
     if (vk == VK_TAB)
     {
-        bool altHeld = g_altLeftDown || g_altRightDown ||
-                       ((key->flags & LLKHF_ALTDOWN) != 0) ||
-                       ((GetAsyncKeyState(VK_MENU) & 0x8000) != 0);
         bool altGrHeld = IsAltGrPhysicallyDown() || g_altGrActive;
+        bool altHeld = g_altLeftDown ||
+                       ((GetAsyncKeyState(VK_LMENU) & 0x8000) != 0);
 
         if (down)
         {
@@ -4048,7 +4050,10 @@ static LRESULT CALLBACK KeyboardHook(int nCode, WPARAM wParam, LPARAM lParam)
             {
                 if (altHeld || altGrHeld)
                 {
-                    g_sessionModifier = altGrHeld ? ModifierSession::AltGr : ModifierSession::LeftAlt;
+                    g_sessionModifier = altGrHeld
+                        ? ModifierSession::AltGr
+                        : (g_altLeftDown ? ModifierSession::LeftAlt
+                                          : ModifierSession::RightAlt);
                     g_state = SelectorState::SelectorActive;
                     g_tabDown = true;
                     g_tabSuppressed = true;
@@ -4057,18 +4062,21 @@ static LRESULT CALLBACK KeyboardHook(int nCode, WPARAM wParam, LPARAM lParam)
 
                     if (CreateSelector())
                     {
-                        // CreateSelector ya posicionó el carrusel directamente
-                        // sobre el siguiente destino. No hacer un segundo salto.
+                        // CreateSelector solo revela/reconfigura el HWND ya
+                        // precargado y posiciona el carrusel directamente.
                         g_tabRepeatStarted = false;
                         SetTimer(g_selector, kTabRepeatTimerId, kTabRepeatInitialDelayMs, nullptr);
+                        return 1;
                     }
-                    else
-                    {
-                        g_state = SelectorState::Idle;
-                        g_sessionModifier = ModifierSession::None;
-                        g_altGrTaskSwitcherArmed = false;
-                    }
-                    return 1;
+
+                    // Si la precarga no está disponible, no bloquear esta
+                    // pulsación: Windows conserva su comportamiento normal.
+                    g_state = SelectorState::Idle;
+                    g_sessionModifier = ModifierSession::None;
+                    g_tabDown = false;
+                    g_tabSuppressed = false;
+                    g_altGrTaskSwitcherArmed = false;
+                    return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam);
                 }
             }
             else
@@ -4207,6 +4215,12 @@ static DWORD WINAPI HookThreadProc(LPVOID)
     PeekMessageW(&initialMessage, nullptr, WM_USER, WM_USER, PM_NOREMOVE);
 
     g_hookThreadId = GetCurrentThreadId();
+
+    // Preparar primero la única ventana del selector. El hook se publica
+    // después de esta precarga para que Alt+Tab nunca entre en una ruta que
+    // cree la ventana o cargue el renderer de forma perezosa.
+    InitializePersistentSelector();
+
     g_keyboardHook = SetWindowsHookExW(
         WH_KEYBOARD_LL, KeyboardHook, GetModuleHandleW(nullptr), 0);
     g_mouseHook = SetWindowsHookExW(
@@ -4219,10 +4233,6 @@ static DWORD WINAPI HookThreadProc(LPVOID)
         SetEvent(g_hookReadyEvent);
 
     SetTimer(nullptr, kActivityTimerId, 250, nullptr);
-
-    // Crear el HWND y precalentar D2D/DWrite/fonts mientras el selector está
-    // oculto. La sesión visible de AltGr+Tab ya no parte de cero.
-    InitializePersistentSelector();
 
     MSG message;
     while (InterlockedCompareExchange(&g_shutdownRequested, 0, 0) == 0 &&
