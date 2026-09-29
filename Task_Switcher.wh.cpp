@@ -37,6 +37,9 @@
  * - Alt + Tab support
  * - Lightweight native C++ implementation
  *
+ * ## Smooth Animations
+ * ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
+ *
  * ## Design
  *
  * Overhaulded focuses on a dark, minimal interface inspired by modern desktop UI design while keeping the selector feeling native to Windows.
