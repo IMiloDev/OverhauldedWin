@@ -16,7 +16,7 @@
 
 A modern, fluid and highly visual replacement for the native Windows Alt+Tab experience.
 
-Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization.
+Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization. 
 
 > Ofc, made as a C++ practice project. Hope you enjoy it as much as I enjoy developing it.
 
