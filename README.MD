@@ -31,8 +31,9 @@ Overhaulded focuses on a dark, minimal interface inspired by modern desktop UI d
 The visual system uses a Black Obsidian surface with subtle content-based illumination, rounded cards, restrained shadows and smooth transitions.
 
 ## Smooth Animations
+### Open
 ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-switcher.webp)
-
+### Slide
 ## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
 
 
