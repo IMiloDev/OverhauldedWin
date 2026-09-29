@@ -41,7 +41,7 @@ The visual system uses a Black Obsidian surface with subtle content-based illumi
 
 ## Requirements
 ```HTML
-- Windows 11 Only)
+- <span style="color: #00FF00">Texto en verde</span>   
 ```
 ## License
 
