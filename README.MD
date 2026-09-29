@@ -24,17 +24,17 @@ A modern, fluid and highly visual replacement for the Windows Alt+Tab experience
 - Alt + Tab support
 - Lightweight native C++ implementation
 
-## Smooth Animations
-## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-switcher.webp)
-
-## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
-
-
 ## Design
 
 Overhaulded focuses on a dark, minimal interface inspired by modern desktop UI design while keeping the selector feeling native to Windows.
 
 The visual system uses a Black Obsidian surface with subtle content-based illumination, rounded cards, restrained shadows and smooth transitions.
+
+## Smooth Animations
+## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-switcher.webp)
+
+## ![OverhauldedWin](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/Desplazamiento-sexy.webp)
+
 
 ## Requirements
 
