@@ -2,7 +2,7 @@
 // @id              overhaulded-alt-tab
 // @name            OverhauldedWin Alt+Tab
 // @description     Replaces the boring Windows Alt+Tab with a modern and elegant window switcher.
-// @version         1.2.21
+// @version         1.1.26
 // @author          IMiloDev
 // @github          https://github.com/IMiloDev
 // @homepage        https://github.com/IMiloDev/OverhauldedWin-Task-Switcher
@@ -12,7 +12,7 @@
 
 // ==WindhawkModReadme==
 /*
-# Overhaulded Task Switcher
+# Overhaulded Task Switcher  
 
 A modern, fluid and highly visual replacement for the native Windows Alt+Tab experience.
 
@@ -1286,6 +1286,7 @@ static bool IsRealUserApplicationWindow(HWND hwnd, DWORD* processId,
 
 static bool IsWindowPendingClose(HWND hwnd);
 static void MarkWindowPendingClose(HWND hwnd);
+static void UnmarkWindowPendingClose(HWND hwnd);
 
 // Devuelve true si la ventana quedó (o ya estaba) en el registro MRU.
 static bool RegisterUserWindow(HWND hwnd, bool activity)
@@ -1336,6 +1337,11 @@ static void MarkWindowPendingClose(HWND hwnd)
     if (!hwnd || IsWindowPendingClose(hwnd))
         return;
     g_pendingCloseWindows.push_back(hwnd);
+}
+
+static void UnmarkWindowPendingClose(HWND hwnd)
+{
+    std::erase(g_pendingCloseWindows, hwnd);
 }
 
 static void PrunePendingCloseWindows()
@@ -1393,6 +1399,7 @@ static void CALLBACK ForegroundWinEventProc(HWINEVENTHOOK, DWORD event, HWND hwn
         return;
 
     PruneUserWindowRegistry();
+    UnmarkWindowPendingClose(hwnd);
     if (RegisterUserWindow(hwnd, true))
         return;
 
@@ -4245,6 +4252,7 @@ static bool CreateSelector(bool shiftHeld)
     g_selectorOriginWindow = GetForegroundWindow();
     MarkSelectorActivity();
 
+    g_pendingCloseWindows.clear();
     RefreshWindowList();
     if (g_groups.empty())
     {
