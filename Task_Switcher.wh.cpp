@@ -12,7 +12,7 @@
 
 // ==WindhawkModReadme==
 /*
-# Overhaulded Task Switcher  
+# Overhaulded Task Switcher
 
 A modern, fluid and highly visual replacement for the native Windows Alt+Tab experience.
 
