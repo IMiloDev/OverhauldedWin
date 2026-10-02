@@ -22,7 +22,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
  
 ## Screenshot
 
-![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/TaskManager.png)
+![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/TaskManager.jpg)
 
 ## Features
 
