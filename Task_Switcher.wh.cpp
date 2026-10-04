@@ -113,10 +113,10 @@ The architecture separates global input handling from the UI/rendering system so
 | Shortcut                                         | Action                        |
 | ------------------------------------------------ | ----------------------------- |
 | `Alt + Tab`                                      | Move to the next window       |
-| `Alt + Shift + Tab`                              | Move to the previous window   |
+| `Alt gr+ Tab`                                    | Move to the previous window   |
 | `Alt + Tab` + release `Alt`                      | Activate the selected window  |
 | `Esc`                                            | Cancel the switcher           |
-| `Alt Gr + Tab + Arrows` `Alt + Arrows`           | Additional navigation/control |
+| `Alt gr + Tab + Arrows` `Alt + Arrows`           | Additional navigation/control |
 
 ## Compatibility
 
