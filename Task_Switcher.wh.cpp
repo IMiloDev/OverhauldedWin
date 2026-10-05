@@ -157,7 +157,7 @@ See the [LICENSE](https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE) 
 
 ---
 **Overhaulded Task Switcher**
-Github [Repo]: https://github.com/IMiloDev/OverhauldedWin
+Github [Repo](https://github.com/IMiloDev/OverhauldedWin)
 Native C++ • Windows 11 • Windhawk
 Made by Milo.
 */
