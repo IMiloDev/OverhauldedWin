@@ -100,14 +100,6 @@ The architecture separates global input handling from the UI/rendering system so
 - Windows 11 only
 - Windhawk
 
-## Installation
-
-1. Install Windhawk.
-2. Open the Overhaulded Win Task Switcher mod.
-3. Install or compile the latest release.
-4. Enable the mod.
-5. Press `Alt + Tab` to open Overhaulded.
-
 ## Controls
 
 | Shortcut                                         | Action                        |
@@ -164,9 +156,11 @@ This project is licensed under the **MIT License**.
 See the [LICENSE](https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE) file for the complete license text.
 
 ---
-
+ORIGINAL REPO: https://github.com/IMiloDev/OverhauldedWin
+---
 **Overhaulded Task Switcher**
 Native C++ • Windows 11 • Windhawk
+Made by Milo.
 */
 // ==/WindhawkModReadme==
 
