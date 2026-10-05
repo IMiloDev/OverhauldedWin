@@ -16,15 +16,16 @@
 
 A modern, fluid and highly visual replacement for the native Windows Alt+Tab experience.
 
-Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization.
+Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization. You can also see the original [GITHUB REPOSITORY](https://github.com/IMiloDev/OverhauldedWin) to send me issues.
 
-> Ofc, made as a C++ practice project. Hope you enjoy it as much as I enjoy developing it.
+> **⚠️ DISCLAIMER**
 >
-You can also see the original [GITHUB REPOSITORY](https://github.com/IMiloDev/OverhauldedWin) to send me issues.
+> If the **Windhawk window is in the foreground**, the native Windows Task Switcher may appear above Overhaulded during `Alt + Tab`.
+>
+> **Workaround:** Minimize or close the Windhawk window before using Overhaulded.
+>
+> [Read more about this limitation →](#native-windows-task-switcher)
 
-> **⚠️ Important:** To avoid a Windows Task Switcher conflict, it is recommended to **minimize or close the Windhawk window** before using `Alt + Tab` with Overhaulded.
->
-> [Learn more about this limitation →](#native-windows-task-switcher)
 
 
 > 
