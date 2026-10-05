@@ -156,8 +156,7 @@ This project is licensed under the **MIT License**.
 See the [LICENSE](https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE) file for the complete license text.
 
 ---
-ORIGINAL REPO: https://github.com/IMiloDev/OverhauldedWin
----
+**ORIGINAL REPO: https://github.com/IMiloDev/OverhauldedWin**
 **Overhaulded Task Switcher**
 Native C++ • Windows 11 • Windhawk
 Made by Milo.
