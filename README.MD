@@ -83,6 +83,7 @@ This allows the selector to appear immediately while keeping the visual opening 
 
 The architecture separates global input handling from the UI/rendering system so that heavy graphics and window-management operations do not run directly inside low-level keyboard hooks.
 
+---
 
 # IMPORTANT
 
