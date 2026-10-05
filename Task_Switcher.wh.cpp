@@ -20,7 +20,14 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 
 > Ofc, made as a C++ practice project. Hope you enjoy it as much as I enjoy developing it.
 >
-> You can also see the original [GITHUB REPOSITORY](https://github.com/IMiloDev/OverhauldedWin) to send me issues.
+You can also see the original [GITHUB REPOSITORY](https://github.com/IMiloDev/OverhauldedWin) to send me issues.
+
+> **⚠️ Important:** To avoid a Windows Task Switcher conflict, it is recommended to **minimize or close the Windhawk window** before using `Alt + Tab` with Overhaulded.
+>
+> [Learn more about this limitation →](#native-windows-task-switcher)
+
+
+> 
 
 ## Screenshot
 
