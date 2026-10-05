@@ -156,7 +156,7 @@ This project is licensed under the **MIT License**.
 See the [LICENSE](https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE) file for the complete license text.
 
 ---
-You can also see the original [Github Repo](https://github.com/IMiloDev/OverhauldedWin) to make me recommends.
+You can also see the original [GITHUB REPOSITORY](https://github.com/IMiloDev/OverhauldedWin) to make me recommends.
 
 Made by Milo.
 */
