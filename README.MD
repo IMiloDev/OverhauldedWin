@@ -2,11 +2,12 @@
 
 A modern, fluid and highly visual replacement for the native Windows Alt+Tab experience.
 
-Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization. 
+Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization.
 
 > Ofc, made as a C++ practice project. Hope you enjoy it as much as I enjoy developing it.
->  
+>
 > You can also see the original [GITHUB REPOSITORY](https://github.com/IMiloDev/OverhauldedWin) to send me issues.
+
 ## Screenshot
 
 ![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/TaskManager.jpg)
@@ -37,7 +38,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 ### Another Features
 
 * Visual continuity between selections
-* Smooth carousel-style navigation 
+* Smooth carousel-style navigation
 * Real window previews
 * Application-aware grouping
 * Subtle depth and lighting
@@ -87,15 +88,33 @@ The architecture separates global input handling from the UI/rendering system so
 * Windows 11 only
 * Windhawk
 
+## Known limitations
+
+Overhaulded is still a pre-release project.
+
+Some applications may behave differently than standard desktop windows, especially those using unusual window structures, custom rendering, or multiple processes.
+
+### Windows native task switcher
+
+When the **Windhawk window itself is in the foreground**, Windows keeps the native task switcher on top of Overhaulded when an `Alt + Tab` session is initiated.
+
+In this situation, the native Windows task switcher may appear over the Overhaulded interface, even though Overhaulded uses a "topmost" window and correctly handles keyboard input.
+
+This behavior is related to how the Windows Shell manages its native task switcher and window/composition priority during the `Alt + Tab` operation. Windows does not provide a reliable, documented, and guaranteed public API that allows forcing a third-party window (which does not take focus) to remain visually above the native task switcher.
+
+Behavior may vary depending on the Windows version and system configuration. This is a limitation of the Windows Shell, not a failure to detect or handle `Alt + Tab` input.
+
+I apologize in advance for the inconvenience. I am constantly looking for a way to fix this issue, but public documentation hasn't yielded a solution so far; while it isn't necessarily impossible, it is highly likely that this issue cannot be resolved without delving into sensitive Windows ecosystem code.
+
 ## Controls
 
-| Shortcut                                         | Action                        |
-| ------------------------------------------------ | ----------------------------- |
-| `Alt + Tab`                                      | Move to the next window       |
-| `Alt gr+ Tab`                                    | Move to the previous window   |
-| `Alt + Tab` + release `Alt`                      | Activate the selected window  |
-| `Esc`                                            | Cancel the switcher           |
-| `Alt gr + Tab + Arrows` `Alt + Arrows`           | Additional navigation/control |
+| Shortcut                               | Action                        |
+| -------------------------------------- | ----------------------------- |
+| `Alt + Tab`                            | Move to the next window       |
+| `Alt gr+ Tab`                          | Move to the previous window   |
+| `Alt + Tab` + release `Alt`            | Activate the selected window  |
+| `Esc`                                  | Cancel the switcher           |
+| `Alt gr + Tab + Arrows` `Alt + Arrows` | Additional navigation/control |
 
 ## Compatibility
 
@@ -110,14 +129,6 @@ The project is still under active development, so behavior may vary depending on
 * Other Alt+Tab/task-switcher modifications
 
 Running multiple applications that replace the native Windows task switcher at the same time may cause conflicts.
-
-## Known Limitations
-
-Overhaulded is still a pre-release project.
-
-Some applications may behave differently from standard desktop windows, particularly applications that use unusual window structures, custom rendering or multiple processes.
-
-Additional compatibility improvements are planned as development continues.
 
 ## Development
 
@@ -140,7 +151,7 @@ The project is continuously evolving as new ideas and technical improvements are
 
 This project is licensed under the **MIT License**.
 
-See the [LICENSE](https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE) file for the complete license text.
+See the https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE file for the complete license text.
 
 ---
 
