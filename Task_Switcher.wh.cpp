@@ -97,12 +97,8 @@ This allows the selector to appear immediately while keeping the visual opening 
 
 The architecture separates global input handling from the UI/rendering system so that heavy graphics and window-management operations do not run directly inside low-level keyboard hooks.
 
-## Requirements
 
-- Windows 11 only
-- Windhawk
-
-## Known limitations
+# IMPORTANT
 
 Overhaulded is still a pre-release project.
 
@@ -119,6 +115,8 @@ This behavior is related to how the Windows Shell manages its native task switch
 Behavior may vary depending on the Windows version and system configuration. This is a limitation of the Windows Shell, not a failure to detect or handle `Alt + Tab` input.
 
 I apologize in advance for the inconvenience. I am constantly looking for a way to fix this issue, but public documentation hasn't yielded a solution so far; while it isn't necessarily impossible, it is highly likely that this issue cannot be resolved without delving into sensitive Windows ecosystem code.
+
+---
 
 ## Controls
 
