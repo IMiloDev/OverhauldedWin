@@ -154,4 +154,4 @@ See the https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE file for th
 
 ---
 
-´Made by Milo.´
+> Made by Milo.
