@@ -24,7 +24,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 >
 > **Workaround:** Minimize or close the Windhawk window before using Overhaulded.
 >
-> [Read more about this limitation →](#native-windows-task-switcher)
+> [Read more about this limitation →](https://github.com/IMiloDev/OverhauldedWin)
 
 
 
@@ -3601,7 +3601,7 @@ static void UpdateSelectorMotion()
     {
         // CRT/TV: primero se comprime verticalmente hacia el centro y luego
         // horizontalmente hasta una línea/punto, sin desplazar el pivote.
-        const float duration = AnimationDuration(420.0f);
+        const float duration = AnimationDuration(360.0f);
         float t = std::min(1.0f, static_cast<float>(elapsed) / duration);
         float verticalPhase = std::min(1.0f, t / 0.72f);
         float verticalEase = verticalPhase * verticalPhase * verticalPhase;
