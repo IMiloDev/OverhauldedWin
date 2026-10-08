@@ -24,7 +24,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 >
 > **Workaround:** Minimize or close the Windhawk window before using Overhaulded.
 >
-> [Read more about this limitation →](#native-windows-task-switcher)
+> [Read more about this limitation →](https://github.com/IMiloDev/OverhauldedWin)
 
 
 
