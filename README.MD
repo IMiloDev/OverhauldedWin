@@ -26,7 +26,6 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 * App grouping by application/process
 * Real DWM window previews
 * Dynamic Obsidian visual system
-* CPU-based desktop blur
 * Rounded cards with subtle downward shadows
 * Floating task switcher surface
 * Fluid opening animation
