@@ -11,9 +11,6 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 > **Workaround:** Minimize or close the Windhawk window before using Overhaulded.
 >
 > [Read more about this limitation →](#native-windows-task-switcher)
-
-
-
 > 
 
 ## Screenshot
@@ -45,7 +42,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 ### Another Features
 
 * Visual continuity between selections
-* Smooth carousel-style navigation
+* Smoothest carousel-style navigation
 * Real window previews
 * Application-aware grouping
 * Subtle depth and lighting
