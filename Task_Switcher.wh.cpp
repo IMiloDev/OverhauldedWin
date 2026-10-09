@@ -131,7 +131,7 @@ I apologize in advance for the inconvenience. I am constantly looking for a way 
 | Shortcut                                     | Action                        |
 | -------------------------------------------- | ----------------------------- |
 | `Alt + Tab`                                  | Move to the next window       |
-| `Alt gr+ Tab`                                | Move to the previous window   |
+| `Alt gr+ Tab`                                | Move to the next window       |
 | `Alt + Tab` + release `Alt`                  | Activate the selected window  |
 | `Esc`                                        | Cancel the switcher           |
 | `Alt gr + Tab + Arrows` `Alt + Tab + Arrows` | Additional navigation/control |
