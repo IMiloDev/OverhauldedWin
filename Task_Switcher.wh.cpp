@@ -21,7 +21,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 > **⚠️ DISCLAIMER**
 >
 > If the **Windhawk window is in the foreground**, the native Windows Task Switcher may appear above Overhaulded during `Alt + Tab`.
->
+> 
 > **Workaround:** Minimize or close the Windhawk window before using Overhaulded.
 >
 > [Read more about this limitation →](#native-windows-task-switcher)
