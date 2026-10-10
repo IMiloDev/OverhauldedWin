@@ -25,7 +25,6 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 > **Workaround:** Minimize or close the Windhawk window before using Overhaulded.
 >
 > [Read more about this limitation →](#native-windows-task-switcher)
-> 
 
 ## Screenshot
 
@@ -56,7 +55,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 ### Another Features
 
 - Visual continuity between selections
-- Smoothest carousel-style navigation
+- Smooth carousel-style navigation
 - Real window previews
 - Application-aware grouping
 - Subtle depth and lighting
@@ -125,13 +124,16 @@ I apologize in advance for the inconvenience. I am constantly looking for a way 
 
 ## Controls
 
-| Shortcut                                     | Action                        |
-| -------------------------------------------- | ----------------------------- |
-| `Alt + Tab`                                  | Move to the next window       |
-| `Alt gr+ Tab`                                | Move to the next window       |
-| `Alt + Tab` + release `Alt`                  | Activate the selected window  |
-| `Esc`                                        | Cancel the switcher           |
-| `Alt gr + Tab + Arrows` `Alt + Tab + Arrows` | Additional navigation/control |
+| Shortcut                                | Action                                                        |
+| --------------------------------------- | ------------------------------------------------------------- |
+| `Alt + Tab`                             | Open the switcher and move to the next window                 |
+| `Alt + Shift + Tab`                     | Open the switcher and move to the previous window             |
+| `AltGr + Tab`                           | Open the switcher and move to the next window                 |
+| `Tab` / `Shift + Tab` (while open)      | Move to the next / previous window                            |
+| `Left` / `Right` (while open)           | Move to the previous / next window                            |
+| `Enter`                                 | Activate the selected window                                  |
+| Release `Alt` (or `AltGr`)              | Activate the selected window                                  |
+| `Esc`                                   | Cancel the switcher                                           |
 
 ## Compatibility
 
