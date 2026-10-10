@@ -222,7 +222,7 @@ See the [LICENSE](https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE) 
       $description: DWM background opacity (0-100). Default - 20.
   $name: DWM background
 - ExperimentalSettings:
-    - ExpandSelectedWindow: false
+    - ExpandSelectedWindow: true
       $name: Expand selected window
       $description: Animates the selected card toward the selected window when confirmed.
     - GeneralBackground: "none"
