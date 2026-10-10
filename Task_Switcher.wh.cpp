@@ -173,6 +173,8 @@ See the https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE file for th
 ---
 
 > Made by Milo.
+
+![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/preview.gif)
 */
 // ==/WindhawkModReadme==
 
