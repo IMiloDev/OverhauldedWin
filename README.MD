@@ -4,15 +4,6 @@ A modern, fluid and highly visual replacement for the native Windows Alt+Tab exp
 
 Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization. You can also see the original [GITHUB REPOSITORY](https://github.com/IMiloDev/OverhauldedWin) to send me issues.
 
-> **⚠️ DISCLAIMER**
->
-> If the **Windhawk window is in the foreground**, the native Windows Task Switcher may appear above Overhaulded during `Alt + Tab`.
-> 
-> **Workaround:** Minimize or close the Windhawk window before using Overhaulded.
->
-> [Read more about this limitation →](#native-windows-task-switcher)
-> 
-
 ## Screenshot
 
 ![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-manager.jpg)
@@ -95,18 +86,6 @@ Overhaulded is still a pre-release project.
 
 Some applications may behave differently than standard desktop windows, especially those using unusual window structures, custom rendering, or multiple processes.
 
-### Native Windows Task Switcher
-
-When the **Windhawk window (An any another high permission windows window) itself is in the foreground**, Windows keeps the native task switcher on top of Overhaulded when an `Alt + Tab` session is initiated.
-
-In this situation, the native Windows task switcher may appear over the Overhaulded interface, even though Overhaulded uses a "topmost" window and correctly handles keyboard input.
-
-This behavior is related to how the Windows Shell manages its native task switcher and window/composition priority during the `Alt + Tab` operation. Windows does not provide a reliable, documented, and guaranteed public API that allows forcing a third-party window (which does not take focus) to remain visually above the native task switcher.
-
-Behavior may vary depending on the Windows version and system configuration. This is a limitation of the Windows Shell, not a failure to detect or handle `Alt + Tab` input.
-
-I apologize in advance for the inconvenience. I am constantly looking for a way to fix this issue, but public documentation hasn't yielded a solution so far; while it isn't necessarily impossible, it is highly likely that this issue cannot be resolved without delving into sensitive Windows ecosystem code.
-
 ---
 
 ## Controls
@@ -117,7 +96,7 @@ I apologize in advance for the inconvenience. I am constantly looking for a way 
 | `Alt gr+ Tab`                                | Move to the next window       |
 | `Alt + Tab` + release `Alt`                  | Activate the selected window  |
 | `Esc`                                        | Cancel the switcher           |
-| `Alt gr + Tab + Arrows` `Alt + Tab + Arrows` | Additional navigation/control |
+| `Opened Task Switcher + Arrows`              | Additional navigation/control |
 
 ## Compatibility
 
