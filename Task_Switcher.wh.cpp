@@ -111,7 +111,7 @@ Some applications may behave differently than standard desktop windows, especial
 
 ### Native Windows Task Switcher
 
-When the **Windhawk window itself is in the foreground**, Windows keeps the native task switcher on top of Overhaulded when an `Alt + Tab` session is initiated.
+When the **Windhawk window (An any another high permission windows window) itself is in the foreground**, Windows keeps the native task switcher on top of Overhaulded when an `Alt + Tab` session is initiated.
 
 In this situation, the native Windows task switcher may appear over the Overhaulded interface, even though Overhaulded uses a "topmost" window and correctly handles keyboard input.
 
