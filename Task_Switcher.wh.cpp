@@ -21,9 +21,12 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 
 > **⚠️ DISCLAIMER**
 >
-> When an **elevated window** is focused, Windows may not deliver low-level keyboard input to a normal-privilege process (UIPI). Windhawk 2.0's UIAccess tool process is included to handle this case; the Explorer hotkey forwarder remains an experimental fallback.
+> If the **Windhawk window is in the foreground**, the native Windows Task Switcher may appear above Overhaulded during `Alt + Tab`.
+> 
+> **Workaround:** Minimize or close the Windhawk window before using Overhaulded.
 >
-> [Read more about this limitation →](#elevated-window-input)
+> [Read more about this limitation →](#native-windows-task-switcher)
+> 
 
 ## Screenshot
 
@@ -107,9 +110,17 @@ Overhaulded is still a pre-release project.
 
 Some applications may behave differently than standard desktop windows, especially those using unusual window structures, custom rendering, or multiple processes.
 
-### Elevated Window Input
+### Native Windows Task Switcher
 
-A standard-privilege process cannot reliably receive low-level keyboard events while an elevated window is focused because of Windows UIPI. On Windhawk 2.0, this mod includes `windhawk-mod-uiaccess.exe` so the tool process can use UIAccess for this scenario. The Explorer hotkey-forwarding component is retained as an experimental fallback. Behavior can still vary by Windows version and configuration; if Alt+Tab falls back to the native switcher, verify that the UIAccess-capable process is available and enabled.
+When the **Windhawk window (An any another high permission windows window) itself is in the foreground**, Windows keeps the native task switcher on top of Overhaulded when an `Alt + Tab` session is initiated.
+
+In this situation, the native Windows task switcher may appear over the Overhaulded interface, even though Overhaulded uses a "topmost" window and correctly handles keyboard input.
+
+This behavior is related to how the Windows Shell manages its native task switcher and window/composition priority during the `Alt + Tab` operation. Windows does not provide a reliable, documented, and guaranteed public API that allows forcing a third-party window (which does not take focus) to remain visually above the native task switcher.
+
+Behavior may vary depending on the Windows version and system configuration. This is a limitation of the Windows Shell, not a failure to detect or handle `Alt + Tab` input.
+
+I apologize in advance for the inconvenience. I am constantly looking for a way to fix this issue, but public documentation hasn't yielded a solution so far; while it isn't necessarily impossible, it is highly likely that this issue cannot be resolved without delving into sensitive Windows ecosystem code.
 
 ---
 
@@ -118,12 +129,10 @@ A standard-privilege process cannot reliably receive low-level keyboard events w
 | Shortcut                                     | Action                        |
 | -------------------------------------------- | ----------------------------- |
 | `Alt + Tab`                                  | Move to the next window       |
-| `Alt + Shift + Tab`                          | Move to the previous window   |
-| `AltGr + Tab`                                | Move to the next window       |
+| `Alt gr+ Tab`                                | Move to the next window       |
 | `Alt + Tab` + release `Alt`                  | Activate the selected window  |
 | `Esc`                                        | Cancel the switcher           |
-| `Alt + Tab` + arrows                       | Navigate through the selector  |
-| `AltGr + Tab` + arrows                      | Navigate through the selector  |
+| `Alt gr + Tab + Arrows` `Alt + Tab + Arrows` | Additional navigation/control |
 
 ## Compatibility
 
