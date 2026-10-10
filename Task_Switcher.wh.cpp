@@ -22,7 +22,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 
 > **⚠️ DISCLAIMER**
 >
-> When an **elevated window** is focused, Windows may not deliver low-level keyboard input to a normal-privilege process (UIPI). On Windhawk 2.0, this mod can run in the UIAccess tool process (`windhawk-mod-uiaccess.exe`). The Explorer hotkey forwarder is a supported input path on versions or configurations where the low-level hook cannot receive the hotkey.
+> When an **elevated window** is focused, Windows may not deliver low-level keyboard input to a normal-privilege process (UIPI). Windhawk 2.0's UIAccess tool process is included to handle this case; the Explorer hotkey forwarder remains an experimental fallback.
 >
 > [Read more about this limitation →](#elevated-window-input)
 
@@ -110,7 +110,7 @@ Some applications may behave differently than standard desktop windows, especial
 
 ### Elevated Window Input
 
-A standard-privilege process cannot reliably receive low-level keyboard events while an elevated window is focused because of Windows UIPI. On Windhawk 2.0, this mod includes `windhawk-mod-uiaccess.exe` so the tool process can use UIAccess for this scenario. The Explorer hotkey-forwarding component is a supported path for forwarding Alt+Tab when the low-level hook cannot receive it, including on older Windhawk versions without the UIAccess tool process. Behavior can still vary by Windows version and configuration; if Alt+Tab falls back to the native switcher, verify that the UIAccess-capable process is available and enabled when using Windhawk 2.0.
+A standard-privilege process cannot reliably receive low-level keyboard events while an elevated window is focused because of Windows UIPI. On Windhawk 2.0, this mod includes `windhawk-mod-uiaccess.exe` so the tool process can use UIAccess for this scenario. The Explorer hotkey-forwarding component is retained as an experimental fallback. Behavior can still vary by Windows version and configuration; if Alt+Tab falls back to the native switcher, verify that the UIAccess-capable process is available and enabled.
 
 ---
 
