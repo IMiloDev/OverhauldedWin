@@ -19,6 +19,12 @@ A modern, fluid and highly visual replacement for the native Windows Alt+Tab exp
 
 Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization. You can also see the original [GITHUB REPOSITORY](https://github.com/IMiloDev/OverhauldedWin) to send me issues.
 
+> **⚠️ DISCLAIMER**
+>
+> When an **elevated window** is focused, Windows may not deliver low-level keyboard input to a normal-privilege process (UIPI). Windhawk 2.0's UIAccess tool process is included to handle this case; the Explorer hotkey forwarder remains an experimental fallback.
+>
+> [Read more about this limitation →](#elevated-window-input)
+
 ## Screenshot
 
 ![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-manager.jpg)
@@ -101,6 +107,10 @@ Overhaulded is still a pre-release project.
 
 Some applications may behave differently than standard desktop windows, especially those using unusual window structures, custom rendering, or multiple processes.
 
+### Elevated Window Input
+
+A standard-privilege process cannot reliably receive low-level keyboard events while an elevated window is focused because of Windows UIPI. On Windhawk 2.0, this mod includes `windhawk-mod-uiaccess.exe` so the tool process can use UIAccess for this scenario. The Explorer hotkey-forwarding component is retained as an experimental fallback. Behavior can still vary by Windows version and configuration; if Alt+Tab falls back to the native switcher, verify that the UIAccess-capable process is available and enabled.
+
 ---
 
 ## Controls
@@ -108,10 +118,12 @@ Some applications may behave differently than standard desktop windows, especial
 | Shortcut                                     | Action                        |
 | -------------------------------------------- | ----------------------------- |
 | `Alt + Tab`                                  | Move to the next window       |
-| `Alt gr+ Tab`                                | Move to the next window       |
+| `Alt + Shift + Tab`                          | Move to the previous window   |
+| `AltGr + Tab`                                | Move to the next window       |
 | `Alt + Tab` + release `Alt`                  | Activate the selected window  |
 | `Esc`                                        | Cancel the switcher           |
-| `Opened Task Switcher + Arrows`              | Additional navigation/control |
+| `Alt + Tab` + arrows                       | Navigate through the selector  |
+| `AltGr + Tab` + arrows                      | Navigate through the selector  |
 
 ## Compatibility
 
@@ -148,7 +160,7 @@ The project is continuously evolving as new ideas and technical improvements are
 
 This project is licensed under the **MIT License**.
 
-See the [LICENSE](https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE) file for the complete license text.
+See the https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE file for the complete license text.
 
 ---
 
