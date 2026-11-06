@@ -12,7 +12,7 @@
 // ==/WindhawkMod==
 // ==WindhawkModReadme==
 /*
-# Overhaulded Task Switcher
+# Overhaulded Task Switcher 
 
 A modern, fluid and highly visual replacement for the native Windows Alt+Tab experience.
 
@@ -27,6 +27,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 - Modern horizontal task switcher interface
 - App grouping by application/process
 - Real DWM window previews
+- Dynamic Obsidian visual system
 - Rounded cards with subtle downward shadows
 - Floating task switcher surface
 - Fluid opening animation
@@ -35,8 +36,6 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 - Subtle center-card snap animation
 - Hover interactions
 - Window closing
-- Automatic card count that never duplicates previews when few windows are open
-- Optional filter to show only the windows of the current monitor
 - Resolution-aware UI scaling
 - High-DPI support
 - Alt + Tab support
@@ -69,7 +68,7 @@ The visual system uses a Black Obsidian surface with:
 - Smooth transitions
 - A fixed central visualizer
 
-The central visualizer remains fixed while the cards move through the carousel, creating the impression of navigating between windows rather than moving the entire interface.
+The central visualizer remains fixed while the cards move through the carousel, creating the impression of navigating through a physical stack of windows rather than moving the entire interface.
 
 ## Smooth Animations
 
@@ -143,12 +142,14 @@ The project is continuously evolving as new ideas and technical improvements are
 
 This project is licensed under the **MIT License**.
 
-See the https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE file for the complete license text.
+See the [LICENSE](https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE) file for the complete license text.
 
 ---
 Overhaulded is still a pre-release project.
 
 Some applications may behave differently than standard desktop windows, especially those using unusual window structures, custom rendering, or multiple processes.
+
+THANKS FOR EVERYONE.
 
 ![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/preview.gif)
 */
