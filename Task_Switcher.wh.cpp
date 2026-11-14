@@ -12,34 +12,33 @@
 // ==/WindhawkMod==
 // ==WindhawkModReadme==
 /*
-# Overhaulded Task Switcher
+# Overhaulded Task Switcher  
 
 A modern, fluid and highly visual replacement for the native Windows Alt+Tab experience.
-
+ 
 Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization. You can also see the original [GITHUB REPOSITORY](https://github.com/IMiloDev/OverhauldedWin) to send me issues.
 
 ## Screenshot
-
+### Carousel
 ![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-manager.jpg)
+
+### Grid
+![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/grid.png)
 
 ## Features
 
-- Selectable Overhaulded and adaptive Grid layouts
 - Modern horizontal task switcher interface
 - App grouping by application/process
 - Real DWM window previews
+- Dynamic Obsidian visual system
 - Rounded cards with subtle downward shadows
-- System, dark and light card color themes
 - Floating task switcher surface
 - Fluid opening animation
-- Smooth horizontal navigation in Overhaulded layout
-- Spatial arrow-key navigation and vertical scrolling in Grid layout
+- Smooth horizontal navigation
 - Interruptible navigation animations
 - Subtle center-card snap animation
 - Hover interactions
 - Window closing
-- Automatic card count that never duplicates previews when few windows are open
-- Optional filter to show only the windows of the current monitor
 - Resolution-aware UI scaling
 - High-DPI support
 - Alt + Tab support
@@ -53,7 +52,6 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 - Visual continuity between selections
 - Smoothest carousel-style navigation
 - Real window previews
-- Application-aware grouping
 - Subtle depth and lighting
 - Fast activation through background execution
 
@@ -61,9 +59,9 @@ Overhaulded also aims to remain visually distinct from other Windows task-switch
 
 ## Design
 
-Overhaulded offers two selectable arrangements: its original horizontal carousel and an adaptive Grid layout. Both share the same card rendering, DWM previews, GPU-accelerated drawing and System/Dark/Light appearance settings. Card colors can follow the Windows app theme or be forced to Dark or Light.
+Overhaulded focuses on a dark, minimal interface inspired by modern desktop UI design while keeping the selector feeling native to Windows.
 
-In Dark mode, the visual system uses a Black Obsidian surface with:
+The visual system uses a Black Obsidian surface with:
 
 - Rounded cards
 - Subtle downward shadows
@@ -72,7 +70,7 @@ In Dark mode, the visual system uses a Black Obsidian surface with:
 - Smooth transitions
 - A fixed central visualizer
 
-In the Overhaulded layout, the central visualizer remains fixed while cards move through the carousel, creating the impression of navigating between windows rather than moving the entire interface. Grid uses a centered, adaptive arrangement with spatial keyboard navigation and smooth vertical scrolling.
+The central visualizer remains fixed while the cards move through the carousel, creating the impression of navigating through a physical stack of windows rather than moving the entire interface.
 
 ## Smooth Animations
 
@@ -146,12 +144,14 @@ The project is continuously evolving as new ideas and technical improvements are
 
 This project is licensed under the **MIT License**.
 
-See the https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE file for the complete license text.
+See the [LICENSE](https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE) file for the complete license text.
 
 ---
 Overhaulded is still a pre-release project.
 
 Some applications may behave differently than standard desktop windows, especially those using unusual window structures, custom rendering, or multiple processes.
+
+THANKS FOR EVERYONE.
 
 ![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/preview.gif)
 */
