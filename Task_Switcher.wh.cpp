@@ -12,33 +12,34 @@
 // ==/WindhawkMod==
 // ==WindhawkModReadme==
 /*
-# Overhaulded Task Switcher  
+# Overhaulded Task Switcher
 
 A modern, fluid and highly visual replacement for the native Windows Alt+Tab experience.
- 
+
 Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization. You can also see the original [GITHUB REPOSITORY](https://github.com/IMiloDev/OverhauldedWin) to send me issues.
 
 ## Screenshot
-### Carousel
-![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-manager.jpg)
 
-### Grid
-![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/grid.png)
+![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-manager.jpg)
 
 ## Features
 
+- Selectable Overhaulded and adaptive Grid layouts
 - Modern horizontal task switcher interface
 - App grouping by application/process
 - Real DWM window previews
-- Dynamic Obsidian visual system
 - Rounded cards with subtle downward shadows
+- System, dark and light card color themes
 - Floating task switcher surface
 - Fluid opening animation
-- Smooth horizontal navigation
+- Smooth horizontal navigation in Overhaulded layout
+- Spatial arrow-key navigation and vertical scrolling in Grid layout
 - Interruptible navigation animations
 - Subtle center-card snap animation
 - Hover interactions
 - Window closing
+- Automatic card count that never duplicates previews when few windows are open
+- Optional filter to show only the windows of the current monitor
 - Resolution-aware UI scaling
 - High-DPI support
 - Alt + Tab support
@@ -52,6 +53,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 - Visual continuity between selections
 - Smoothest carousel-style navigation
 - Real window previews
+- Application-aware grouping
 - Subtle depth and lighting
 - Fast activation through background execution
 
@@ -59,9 +61,9 @@ Overhaulded also aims to remain visually distinct from other Windows task-switch
 
 ## Design
 
-Overhaulded focuses on a dark, minimal interface inspired by modern desktop UI design while keeping the selector feeling native to Windows.
+Overhaulded offers two selectable arrangements: its original horizontal carousel and an adaptive Grid layout. Both share the same card rendering, DWM previews, GPU-accelerated drawing and System/Dark/Light appearance settings. Card colors can follow the Windows app theme or be forced to Dark or Light.
 
-The visual system uses a Black Obsidian surface with:
+In Dark mode, the visual system uses a Black Obsidian surface with:
 
 - Rounded cards
 - Subtle downward shadows
@@ -70,7 +72,7 @@ The visual system uses a Black Obsidian surface with:
 - Smooth transitions
 - A fixed central visualizer
 
-The central visualizer remains fixed while the cards move through the carousel, creating the impression of navigating through a physical stack of windows rather than moving the entire interface.
+In the Overhaulded layout, the central visualizer remains fixed while cards move through the carousel, creating the impression of navigating between windows rather than moving the entire interface. Grid uses a centered, adaptive arrangement with spatial keyboard navigation and smooth vertical scrolling.
 
 ## Smooth Animations
 
@@ -144,14 +146,12 @@ The project is continuously evolving as new ideas and technical improvements are
 
 This project is licensed under the **MIT License**.
 
-See the [LICENSE](https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE) file for the complete license text.
+See the https://github.com/IMiloDev/OverhauldedWin/blob/main/LICENSE file for the complete license text.
 
 ---
 Overhaulded is still a pre-release project.
 
 Some applications may behave differently than standard desktop windows, especially those using unusual window structures, custom rendering, or multiple processes.
-
-THANKS FOR EVERYONE.
 
 ![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/preview.gif)
 */
@@ -783,7 +783,8 @@ static bool g_staticSelectionAnimating = false;
 static float g_staticScaleFrom[3] = { 1.0f, 1.0f, 1.0f };
 static constexpr float kSelectedCardSizeBoost = 1.08f;
 static constexpr float kStaticSelectedScale = 1.075f * kSelectedCardSizeBoost;
-static constexpr float kCarouselSelectedScale = kSelectedCardSizeBoost;
+// Overhaulded center card: 7% smaller than the shared selected boost.
+static constexpr float kCarouselSelectedScale = kSelectedCardSizeBoost * 0.93f;
 static constexpr float kStaticSelectionDurationMs = 190.0f;
 
 static int ScaleLayoutPx(float value)
@@ -1176,6 +1177,9 @@ static RECT g_closeButtonGeometryRect = {};
 static IDWriteFactory* g_dwriteFactory = nullptr;
 static IDWriteTextFormat* g_dwriteSelectedFormat = nullptr;
 static IDWriteTextFormat* g_dwriteNormalFormat = nullptr;
+// Header formats rebuilt at the card's visual scale (index 0 = normal, 1 = selected).
+static IDWriteTextFormat* g_dwriteScaledHeaderFormat[2] = { nullptr, nullptr };
+static int g_dwriteScaledHeaderPx[2] = { 0, 0 };
 static IDWriteTextFormat* g_dwriteCounterFormat = nullptr;
 static IDWriteTextFormat* g_dwriteCloseFormat = nullptr;
 static float g_dwriteFormatsScale = 0.0f;
@@ -1183,6 +1187,9 @@ static float g_gdiFontsScale = 0.0f;
 
 static HFONT g_nameFont = nullptr;
 static HFONT g_selectedNameFont = nullptr;
+// GDI header fonts rebuilt at the card's visual scale (index 0 = normal, 1 = selected).
+static HFONT g_scaledHeaderFont[2] = { nullptr, nullptr };
+static int g_scaledHeaderFontPx[2] = { 0, 0 };
 static HFONT g_secondaryFont = nullptr;
 
 static std::vector<AppGroup> g_groups;
@@ -3610,6 +3617,11 @@ static void ReleaseDWriteFormats()
     if (g_dwriteCloseFormat) { g_dwriteCloseFormat->Release(); g_dwriteCloseFormat = nullptr; }
     if (g_dwriteNormalFormat) { g_dwriteNormalFormat->Release(); g_dwriteNormalFormat = nullptr; }
     if (g_dwriteSelectedFormat) { g_dwriteSelectedFormat->Release(); g_dwriteSelectedFormat = nullptr; }
+    for (int i = 0; i < 2; ++i)
+    {
+        if (g_dwriteScaledHeaderFormat[i]) { g_dwriteScaledHeaderFormat[i]->Release(); g_dwriteScaledHeaderFormat[i] = nullptr; }
+        g_dwriteScaledHeaderPx[i] = 0;
+    }
     g_dwriteFormatsScale = 0.0f;
 }
 
@@ -4152,6 +4164,13 @@ static void ReleaseUiFontObjects()
         DeleteObject(reinterpret_cast<HGDIOBJ>(g_selectedNameFont));
     if (g_secondaryFont)
         DeleteObject(reinterpret_cast<HGDIOBJ>(g_secondaryFont));
+    for (int i = 0; i < 2; ++i)
+    {
+        if (g_scaledHeaderFont[i])
+            DeleteObject(reinterpret_cast<HGDIOBJ>(g_scaledHeaderFont[i]));
+        g_scaledHeaderFont[i] = nullptr;
+        g_scaledHeaderFontPx[i] = 0;
+    }
     g_nameFont = nullptr;
     g_selectedNameFont = nullptr;
     g_secondaryFont = nullptr;
@@ -4289,13 +4308,27 @@ static RECT GetSlotHeaderRect(int slot)
     header.right = static_cast<int>(roundf(g.right)) - pad;
     header.top = static_cast<int>(roundf(g.top)) + pad;
     header.bottom = header.top + static_cast<int>(roundf(g.headerHeight));
-    const float visualScale = (IsCompactAutomaticMode() || IsGridMode())
-        ? GetSlotVisualScale(slot) : 1.0f;
+
+    // The header follows the exact visual scale of its card in every layout.
+    // GetSlotVisualScale() is 1.0 for non-selected carousel cards, so only the
+    // scaled card gets transformed.
+    const float visualScale = GetSlotVisualScale(slot);
     if (fabsf(visualScale - 1.0f) > 0.0001f)
     {
-        RECT card = GetSlotCardRect(slot);
-        const float pivotX = (static_cast<float>(card.left) + card.right) * 0.5f;
-        const float pivotY = (static_cast<float>(card.top) + card.bottom) * 0.5f;
+        float pivotX, pivotY;
+        if (IsCompactAutomaticMode() || IsGridMode())
+        {
+            RECT card = GetSlotCardRect(slot);
+            pivotX = (static_cast<float>(card.left) + card.right) * 0.5f;
+            pivotY = (static_cast<float>(card.top) + card.bottom) * 0.5f;
+        }
+        else
+        {
+            // Same pivot GetSlotCardRect() uses (center of the unscaled card).
+            // The exit offset is applied once below, never through the pivot.
+            pivotX = (roundf(g.left) + roundf(g.right)) * 0.5f;
+            pivotY = (roundf(g.top) + roundf(g.bottom)) * 0.5f;
+        }
         header = ScaleRectAroundPoint(header, visualScale, pivotX, pivotY);
     }
     if (g_cardExitActive && slot == g_cardExitSlot)
@@ -4305,6 +4338,68 @@ static RECT GetSlotHeaderRect(int slot)
         header.bottom += offset;
     }
     return header;
+}
+
+// Single source of truth for the contents of a slot header. Both the Direct2D
+// and the GDI painters consume this layout, so they always match.
+struct SlotHeaderLayout
+{
+    RECT icon;
+    RECT text;
+    int fontPx; // 0 = use the stock (unscaled) format/font
+};
+
+static SlotHeaderLayout ComputeSlotHeaderLayout(int slot, bool selected, float distFromCenter)
+{
+    const RECT rc = GetSlotHeaderRect(slot);
+    const int iconBase = ScaleLayoutPx(static_cast<float>(selected ? 20 : (distFromCenter < 1.5f ? 18 : 16)));
+    const int paddingBase = ScaleLayoutPx(static_cast<float>(selected ? 10 : (distFromCenter < 1.5f ? 8 : 6)));
+    const int gapBase = ScaleLayoutPx(8.0f);
+
+    SlotHeaderLayout layout = {};
+
+    if (IsGridMode() || IsCompactAutomaticMode())
+    {
+        // Grid / Compact Automatic: unchanged behavior.
+        const int iconX = rc.left + paddingBase;
+        const int iconY = rc.top + (rc.bottom - rc.top - iconBase) / 2;
+        layout.icon = { iconX, iconY, iconX + iconBase, iconY + iconBase };
+        const float iconScale = IsCompactAutomaticMode() ? 1.0f : GetSlotVisualScale(slot);
+        if (fabsf(iconScale - 1.0f) > 0.0001f)
+        {
+            RECT cardRect = GetSlotCardRect(slot);
+            const float pivotX = (static_cast<float>(cardRect.left) + cardRect.right) * 0.5f;
+            const float pivotY = (static_cast<float>(cardRect.top) + cardRect.bottom) * 0.5f;
+            layout.icon = ScaleRectAroundPoint(layout.icon, iconScale, pivotX, pivotY);
+        }
+        layout.text = rc;
+        layout.text.left = iconX + iconBase + gapBase;
+        layout.text.right = rc.right - gapBase;
+        layout.fontPx = 0;
+        return layout;
+    }
+
+    // Carousel: rc is already scaled with the card, so every metric inside it
+    // is multiplied by the same factor exactly once. Nothing is re-scaled
+    // around the card pivot afterwards.
+    const float scale = GetSlotVisualScale(slot);
+    auto scaled = [scale](int value) {
+        return static_cast<int>(roundf(static_cast<float>(value) * scale));
+    };
+    const int iconSize = scaled(iconBase);
+    const int iconX = rc.left + scaled(paddingBase);
+    const int iconY = rc.top + (rc.bottom - rc.top - iconSize) / 2;
+    layout.icon = { iconX, iconY, iconX + iconSize, iconY + iconSize };
+
+    layout.text = rc; // same top/bottom as the icon's reference => shared vertical center
+    layout.text.left = layout.icon.right + scaled(gapBase);
+    layout.text.right = rc.right - scaled(gapBase);
+
+    const int baseFontPx = selected ? std::max(10, ScaleLayoutPx(16.0f))
+                                    : std::max(9, ScaleLayoutPx(13.0f));
+    const int fontPx = std::max(1, scaled(baseFontPx));
+    layout.fontPx = (fontPx == baseFontPx) ? 0 : fontPx;
+    return layout;
 }
 
 static RECT GetSlotPreviewRect(int slot)
@@ -6148,54 +6243,68 @@ static ID2D1RadialGradientBrush* EnsureCloseAccentBrush()
     return SUCCEEDED(hr) ? g_closeAccentBrush : nullptr;
 }
 
-static void PaintSlotHeaderD2D(int slot, int groupIndex, bool selected, float distFromCenter)
+// Text format for the header at an exact pixel size; falls back to the stock
+// format when fontPx is 0 (unscaled cards, Grid, Compact Automatic).
+static IDWriteTextFormat* GetHeaderTextFormatD2D(bool selected, int fontPx)
 {
-    RECT rc = GetSlotHeaderRect(slot);
-    AppGroup& group = g_groups[groupIndex];
-    const std::wstring& text = MakeSlotDisplayText(group);
+    IDWriteTextFormat* stock = selected ? g_dwriteSelectedFormat : g_dwriteNormalFormat;
+    if (fontPx <= 0 || !g_dwriteFactory)
+        return stock;
+    const int i = selected ? 1 : 0;
+    if (g_dwriteScaledHeaderFormat[i] && g_dwriteScaledHeaderPx[i] == fontPx)
+        return g_dwriteScaledHeaderFormat[i];
 
-    int iconSize = ScaleLayoutPx(static_cast<float>(selected ? 20 : (distFromCenter < 1.5f ? 18 : 16)));
-    int paddingLeft = ScaleLayoutPx(static_cast<float>(selected ? 10 : (distFromCenter < 1.5f ? 8 : 6)));
-    int iconX = rc.left + paddingLeft;
-    int iconY = rc.top + (rc.bottom - rc.top - iconSize) / 2;
-    int textX = iconX + iconSize + ScaleLayoutPx(8.0f);
-    RECT iconRect = { iconX, iconY, iconX + iconSize, iconY + iconSize };
-    const float iconScale = IsCompactAutomaticMode() ? 1.0f : GetSlotVisualScale(slot);
-    if (fabsf(iconScale - 1.0f) > 0.0001f)
+    IDWriteTextFormat* format = nullptr;
+    const HRESULT hr = g_dwriteFactory->CreateTextFormat(
+        L"Segoe UI Variable Text", nullptr,
+        selected ? DWRITE_FONT_WEIGHT_SEMI_BOLD : DWRITE_FONT_WEIGHT_MEDIUM,
+        DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
+        static_cast<float>(fontPx), L"", &format);
+    if (FAILED(hr) || !format)
+        return stock;
+
+    format->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
+    format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+    IDWriteInlineObject* ellipsisSign = nullptr;
+    if (SUCCEEDED(g_dwriteFactory->CreateEllipsisTrimmingSign(format, &ellipsisSign)) &&
+        ellipsisSign)
     {
-        RECT cardRect = GetSlotCardRect(slot);
-        float pivotX = (static_cast<float>(cardRect.left) + cardRect.right) * 0.5f;
-        float pivotY = (static_cast<float>(cardRect.top) + cardRect.bottom) * 0.5f;
-        const float iconCenterX =
-            (static_cast<float>(iconRect.left) + iconRect.right) * 0.5f;
-        iconRect = ScaleRectAroundPoint(iconRect, iconScale, pivotX, pivotY);
-        if (!IsGridMode() && !IsCompactAutomaticMode())
-        {
-            const int horizontalCompensation = static_cast<int>(roundf(
-                (pivotX - iconCenterX) * (iconScale - 1.0f)));
-            OffsetRect(&iconRect, horizontalCompensation, 0);
-        }
+        const DWRITE_TRIMMING trimming = { DWRITE_TRIMMING_GRANULARITY_CHARACTER, 0, 0 };
+        format->SetTrimming(&trimming, ellipsisSign);
+        ellipsisSign->Release();
     }
 
+    if (g_dwriteScaledHeaderFormat[i])
+        g_dwriteScaledHeaderFormat[i]->Release();
+    g_dwriteScaledHeaderFormat[i] = format;
+    g_dwriteScaledHeaderPx[i] = fontPx;
+    return format;
+}
+
+static void PaintSlotHeaderD2D(int slot, int groupIndex, bool selected, float distFromCenter)
+{
+    AppGroup& group = g_groups[groupIndex];
+    const std::wstring& text = MakeSlotDisplayText(group);
+    const SlotHeaderLayout layout = ComputeSlotHeaderLayout(slot, selected, distFromCenter);
 
     EnsureIconBitmap(groupIndex);
     if (group.iconBitmap)
     {
         D2D1_RECT_F iconDest = D2D1::RectF(
-            static_cast<float>(iconRect.left),
-            static_cast<float>(iconRect.top),
-            static_cast<float>(iconRect.right),
-            static_cast<float>(iconRect.bottom));
+            static_cast<float>(layout.icon.left),
+            static_cast<float>(layout.icon.top),
+            static_cast<float>(layout.icon.right),
+            static_cast<float>(layout.icon.bottom));
         g_d2dRenderTarget->DrawBitmap(
             group.iconBitmap, &iconDest, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
     }
 
-    IDWriteTextFormat* format = selected ? g_dwriteSelectedFormat : g_dwriteNormalFormat;
+    IDWriteTextFormat* format = GetHeaderTextFormatD2D(selected, layout.fontPx);
     if (format)
     {
         D2D1_RECT_F textRectD2D = D2D1::RectF(
-            static_cast<float>(textX), static_cast<float>(rc.top),
-            static_cast<float>(rc.right - ScaleLayoutPx(8.0f)), static_cast<float>(rc.bottom));
+            static_cast<float>(layout.text.left), static_cast<float>(layout.text.top),
+            static_cast<float>(layout.text.right), static_cast<float>(layout.text.bottom));
         D2D1_COLOR_F textColor = selected
             ? D2D1::ColorF(GetRValue(g_textSelectedColor) / 255.0f,
                            GetGValue(g_textSelectedColor) / 255.0f,
@@ -6419,40 +6528,36 @@ static void PaintGridMoreAboveIndicatorGDI(HDC hdc)
     DeleteObject(arrowPen);
 }
 
+// GDI font for the header at an exact pixel size; falls back to the stock font
+// when fontPx is 0 (unscaled cards, Grid, Compact Automatic).
+static HFONT GetHeaderFontGDI(bool selected, int fontPx)
+{
+    HFONT stock = selected ? g_selectedNameFont : g_nameFont;
+    if (fontPx <= 0)
+        return stock;
+    const int i = selected ? 1 : 0;
+    if (g_scaledHeaderFont[i] && g_scaledHeaderFontPx[i] == fontPx)
+        return g_scaledHeaderFont[i];
+
+    HFONT font = CreateModernFont(L"Segoe UI Variable Text", L"Segoe UI",
+                                  -fontPx, selected ? FW_SEMIBOLD : 500);
+    if (!font)
+        return stock;
+    if (g_scaledHeaderFont[i])
+        DeleteObject(reinterpret_cast<HGDIOBJ>(g_scaledHeaderFont[i]));
+    g_scaledHeaderFont[i] = font;
+    g_scaledHeaderFontPx[i] = fontPx;
+    return font;
+}
+
 static void PaintSlotHeaderGDI(HDC hdc, int slot, int groupIndex, bool selected, float distFromCenter)
 {
-    RECT rc = GetSlotHeaderRect(slot);
     AppGroup& group = g_groups[groupIndex];
     const std::wstring& text = MakeSlotDisplayText(group);
+    const SlotHeaderLayout layout = ComputeSlotHeaderLayout(slot, selected, distFromCenter);
 
-    int iconSize = ScaleLayoutPx(static_cast<float>(selected ? 20 : (distFromCenter < 1.5f ? 18 : 16)));
-    int paddingLeft = ScaleLayoutPx(static_cast<float>(selected ? 10 : (distFromCenter < 1.5f ? 8 : 6)));
-    int iconX = rc.left + paddingLeft;
-    int iconY = rc.top + (rc.bottom - rc.top - iconSize) / 2;
-    int textX = iconX + iconSize + ScaleLayoutPx(8.0f);
-    RECT iconRect = { iconX, iconY, iconX + iconSize, iconY + iconSize };
-    const float iconScale = IsCompactAutomaticMode() ? 1.0f : GetSlotVisualScale(slot);
-    if (fabsf(iconScale - 1.0f) > 0.0001f)
-    {
-        RECT cardRect = GetSlotCardRect(slot);
-        float pivotX = (static_cast<float>(cardRect.left) + cardRect.right) * 0.5f;
-        float pivotY = (static_cast<float>(cardRect.top) + cardRect.bottom) * 0.5f;
-        const float iconCenterX =
-            (static_cast<float>(iconRect.left) + iconRect.right) * 0.5f;
-        iconRect = ScaleRectAroundPoint(iconRect, iconScale, pivotX, pivotY);
-        if (!IsGridMode() && !IsCompactAutomaticMode())
-        {
-            const int horizontalCompensation = static_cast<int>(roundf(
-                (pivotX - iconCenterX) * (iconScale - 1.0f)));
-            OffsetRect(&iconRect, horizontalCompensation, 0);
-        }
-    }
-
-
-    RECT textRect = rc;
-    textRect.left = textX;
-    textRect.right = rc.right - ScaleLayoutPx(8.0f);
-    HFONT font = selected ? g_selectedNameFont : g_nameFont;
+    RECT textRect = layout.text;
+    HFONT font = GetHeaderFontGDI(selected, layout.fontPx);
     COLORREF textColor = selected ? g_textSelectedColor : g_textNormalColor;
     SetBkMode(hdc, TRANSPARENT);
     SetTextColor(hdc, textColor);
@@ -6463,8 +6568,8 @@ static void PaintSlotHeaderGDI(HDC hdc, int slot, int groupIndex, bool selected,
 
     if (group.icon)
     {
-        DrawIconEx(hdc, iconRect.left, iconRect.top, group.icon,
-                   iconRect.right - iconRect.left, iconRect.bottom - iconRect.top,
+        DrawIconEx(hdc, layout.icon.left, layout.icon.top, group.icon,
+                   layout.icon.right - layout.icon.left, layout.icon.bottom - layout.icon.top,
                    0, nullptr, DI_NORMAL);
     }
 }
