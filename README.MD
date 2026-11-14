@@ -5,8 +5,11 @@ A modern, fluid and highly visual replacement for the native Windows Alt+Tab exp
 Built from scratch in native C++ as a project to explore Windows APIs, graphics, animation systems and desktop customization. You can also see the original [GITHUB REPOSITORY](https://github.com/IMiloDev/OverhauldedWin) to send me issues.
 
 ## Screenshot
-
+### Carousel
 ![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-manager.jpg)
+
+### Grid
+![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/grid.png)
 
 ## Features
 
