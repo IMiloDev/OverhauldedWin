@@ -6,7 +6,7 @@ Built from scratch in native C++ as a project to explore Windows APIs, graphics,
 
 ## Screenshot
 ### Carousel
-![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-manager.jpg)
+![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/task-manager.png)
 
 ### Grid
 ![OverhauldedWin Task Switcher](https://raw.githubusercontent.com/IMiloDev/OverhauldedWin/main/assets/icons/grid.png)
